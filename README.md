@@ -13,7 +13,9 @@ A command-line language learning game using Tatoeba's great database. Accelerate
 
 # Dependencies
 www.crates.io/crates/minreq
+
 www.crates.io/crates/unescaper
+
 www.crates.io/crates/rand
 
 # Contributing
