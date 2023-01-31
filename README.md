@@ -11,6 +11,9 @@ A command-line language learning game using Tatoeba's great database. Accelerate
 - Some sort of persistency between rounds
 - More gamemodes
 
+# Usage
+Just pass in the language tag from www.tatoeba.org for the language you want to use, either as an argument to `cargo run` or into the prompt. E.g. `fra` for French and `gle` for Irish.
+
 # Dependencies
 www.crates.io/crates/minreq
 
