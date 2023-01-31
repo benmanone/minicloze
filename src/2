@@ -1,0 +1,90 @@
+use minreq;
+
+fn main() -> Result<(), minreq::Error> {
+    println!("fetching sentences for you...");
+    let response = minreq::get("https://tatoeba.org/en/api_v0/search?from=eng&orphans=no&sort=random&to=gle&tran").send()?;
+    let rep_string = response.as_str()?;
+    // finds the start of results by locating the first [ in rep_string
+    let results_start = 1+get_char_locations(rep_string, '[')[1];
+    let results = &rep_string[results_start..rep_string.len()-2];
+    parse(results);
+    Ok(())
+}
+
+fn parse(results: &str) -> Vec<Sentence> {
+    let mut sentences = Vec::new();
+    let mut raw = results;
+    
+    // there is a new sentence every second instance of },
+    // x yields both halves of results split at 2nd },
+    for _i in 1..10 {
+        let sentence_and_remainder = raw.match_indices("},{").nth(0).map(|(index, _)| raw.split_at(index));
+        if let Some(s) = sentence_and_remainder {
+            let including_bracket = (s.0).to_owned() + "}";
+            let sentence = Sentence::new(&including_bracket);
+            if sentence.id != -1 {
+                println!("{}: {} {}", &sentence.id, &sentence.text, &sentence.translation);
+                sentences.push(sentence);
+            }
+            raw = &s.1[2..];
+        }
+    }
+    sentences
+}
+
+struct Sentence {
+    id: i32,
+    text: String,
+    translation: String,
+}
+
+impl Sentence {
+    fn new(string: &String) -> Sentence {
+        let text_positions: Vec<usize> = string.match_indices("text").map(|(i, _)|i).collect();
+        if text_positions.len() < 2 { return Sentence { id: -1, text: "".to_string(), translation: "".to_string() } }
+        let id_position = string.find("id").unwrap();
+        let text_start = text_positions[0]+7;
+        let text_end = &string[text_start..].find(",\"l").unwrap()+text_start;
+        let translation_start = text_positions[1]+7;
+        let translation_end = &string[translation_start..].find(",\"l").unwrap()+translation_start;
+
+        Sentence {
+            id: string[id_position+4..(string[id_position-2..].find(',').unwrap())].parse::<i32>().unwrap(),
+            text: string[text_start..text_end-1].to_string(),
+            translation: parse_accents(&string[translation_start..translation_end-1].to_string()),
+        }
+    }
+}
+
+fn parse_accents(string: &str) -> String {
+    let mut i = 0;
+    let mut chars: Vec<u8> = Vec::new();
+    while i < string.len()-1 {
+        if string.as_bytes()[i] as u8 == b'\\' {
+            let number = &string[i+2..i+6];
+            let format = "\\".to_owned() + "u" + "{" + number + "}";
+            println!("{}", format);
+            for i in format.as_bytes() {
+
+                chars.push(*i);
+            }
+            i += 6;
+        }
+        else {
+            chars.push(string.as_bytes()[i] as u8);
+            i += 1;
+        }
+    }
+    println!("{}", String::from_utf8(chars).unwrap());
+    String::from_utf8(chars).unwrap()
+}
+
+fn get_char_locations(string: &str, query: char) -> Vec<usize> {
+    string.chars().enumerate().filter(|(_, c)| *c == query).map(|(i, _)| i).collect::<Vec<_>>()
+}
+ 
+fn decode(number: &str) -> Option<char> {
+    u32::from_str_radix(number, 16)
+        .ok()
+        .and_then(std::char::from_u32)
+}

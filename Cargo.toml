@@ -1,0 +1,9 @@
+[package]
+name = "minicloze"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+minreq = { version="2.6.0", features=["https"] }
+rand = "0.8.5"
+unescaper = "0.1.1"
