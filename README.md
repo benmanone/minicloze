@@ -3,7 +3,7 @@ A command-line language learning game using Tatoeba's great database. Accelerate
 
 # Features
 - Support for almost 500 languages
-- Simple and efficient implementation
+- Simple and efficient implementation, the final build is only ~5.4mb as it stands.
 - Written in pure Rust
 
 # Plans
@@ -12,7 +12,7 @@ A command-line language learning game using Tatoeba's great database. Accelerate
 - More gamemodes
 
 # Usage
-Just pass in the language tag from www.tatoeba.org for the language you want to use, either as an argument to `cargo run` or into the prompt. E.g. `fra` for French and `gle` for Irish.
+Just pass in the language from www.tatoeba.org you want to use into the prompt. If you're building locally you can pass it into `cargo run`.
 
 # Dependencies
 www.crates.io/crates/minreq
