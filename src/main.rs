@@ -5,28 +5,41 @@ use std::time::Instant;
 use rand::prelude::*;
 use minreq;
 use unescaper;
+mod langs;
 
-fn main() -> Result<(), minreq::Error> {
+fn main() {
     let args: Vec<_>  = env::args().collect();
-    let mut language: String;
+    let lang_codes = langs::propagate();
+    let mut language_input: String;
 
     if args.len() > 1 {
-        language = (&args[1]).to_string();
+        language_input = (&args[1]).to_string();
     }
     else {
-        language = String::new();
+        language_input = String::new();
 
         print!("What language do you want to study? ");
 
         io::stdout().flush().unwrap();
-        io::stdin().read_line(&mut language).unwrap();
+        io::stdin().read_line(&mut language_input).unwrap();
 
-        language = language.trim().to_string();
+        language_input = language_input.trim_start().trim_end().to_string();
     }
     print!("Fetching sentences for you...");
     io::stdout().flush().unwrap();
 
     let now = Instant::now();
+
+    let language_request = language_input.to_lowercase().to_string();
+    let language_opt = lang_codes.get(&language_request);
+    let language;
+
+    if let Some(x) = language_opt {
+        language = x.to_string();
+    }
+    else {
+        panic!("Please enter a valid language");
+    }
 
     let sentences = generate_sentences(&language).unwrap();
     let len = sentences.len();
@@ -36,7 +49,6 @@ fn main() -> Result<(), minreq::Error> {
     print!(" Processing complete in {:.2?}, {} sentences parsed.\n", elapsed, len);
 
     play(sentences, len, language);
-    Ok(())
 }
 
 fn http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
