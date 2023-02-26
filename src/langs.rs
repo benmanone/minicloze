@@ -1,428 +1,427 @@
 use std::collections::HashMap;
 
 pub fn propagate() -> HashMap<&'static str, &'static str> {
-    let mut lang_codes = HashMap::new();
-
-    lang_codes.insert("english", "eng");
-    lang_codes.insert("russian", "rus");
-    lang_codes.insert("italian", "ita");
-    lang_codes.insert("turkish", "tur");
-    lang_codes.insert("esperanto", "epo");
-    lang_codes.insert("kabyle", "kab");
-    lang_codes.insert("berber", "ber");
-    lang_codes.insert("german", "deu");
-    lang_codes.insert("french", "fra");
-    lang_codes.insert("portuguese", "por");
-    lang_codes.insert("spanish", "spa");
-    lang_codes.insert("hungarian", "hun");
-    lang_codes.insert("japanese", "jpn");
-    lang_codes.insert("hebrew", "heb");
-    lang_codes.insert("ukrainian", "ukr");
-    lang_codes.insert("dutch", "nld");
-    lang_codes.insert("finnish", "fin");
-    lang_codes.insert("polish", "pol");
-    lang_codes.insert("lithuanian", "lit");
-    lang_codes.insert("macedonian", "mkd");
-    lang_codes.insert("marathi", "mar");
-    lang_codes.insert("mandarin chinese", "cmn");
-    lang_codes.insert("czech", "ces");
-    lang_codes.insert("danish", "dan");
-    lang_codes.insert("toki pona", "tok");
-    lang_codes.insert("swedish", "swe");
-    lang_codes.insert("serbian", "srp");
-    lang_codes.insert("latin", "lat");
-    lang_codes.insert("arabic", "ara");
-    lang_codes.insert("greek", "ell");
-    lang_codes.insert("tagalog", "tgl");
-    lang_codes.insert("romanian", "ron");
-    lang_codes.insert("interlingua", "ina");
-    lang_codes.insert("persian", "pes");
-    lang_codes.insert("bulgarian", "bul");
-    lang_codes.insert("klingon", "tlh");
-    lang_codes.insert("congo swahili", "swc");
-    lang_codes.insert("vietnamese", "vie");
-    lang_codes.insert("lingua franca nova", "lfn");
-    lang_codes.insert("hausa", "hau");
-    lang_codes.insert("indonesian", "ind");
-    lang_codes.insert("low german (low saxon)", "nds");
-    lang_codes.insert("slovak", "slk");
-    lang_codes.insert("norwegian bokmål", "nob");
-    lang_codes.insert("lojban", "jbo");
-    lang_codes.insert("hindi", "hin");
-    lang_codes.insert("tatar", "tat");
-    lang_codes.insert("nande", "nnb");
-    lang_codes.insert("icelandic", "isl");
-    lang_codes.insert("yiddish", "yid");
-    lang_codes.insert("belarusian", "bel");
-    lang_codes.insert("central kurdish (soranî)", "ckb");
-    lang_codes.insert("korean", "kor");
-    lang_codes.insert("ido", "ido");
-    lang_codes.insert("northern kurdish (kurmancî)", "kmr");
-    lang_codes.insert("bengali", "ben");
-    lang_codes.insert("catalan", "cat");
-    lang_codes.insert("uyghur", "uig");
-    lang_codes.insert("interlingue", "ile");
-    lang_codes.insert("breton", "bre");
-    lang_codes.insert("malay", "zsm");
-    lang_codes.insert("ossetian", "oss");
-    lang_codes.insert("turkmen", "tuk");
-    lang_codes.insert("cantonese", "yue");
-    lang_codes.insert("basque", "eus");
-    lang_codes.insert("georgian", "kat");
-    lang_codes.insert("occitan", "oci");
-    lang_codes.insert("gronings", "gos");
-    lang_codes.insert("estonian", "est");
-    lang_codes.insert("azerbaijani", "aze");
-    lang_codes.insert("croatian", "hrv");
-    lang_codes.insert("thai", "tha");
-    lang_codes.insert("coastal kadazan", "kzj");
-    lang_codes.insert("kirundi", "run");
-    lang_codes.insert("santali", "sat");
-    lang_codes.insert("armenian", "hye");
-    lang_codes.insert("volapük", "vol");
-    lang_codes.insert("lingala", "lin");
-    lang_codes.insert("shanghainese", "wuu");
-    lang_codes.insert("galician", "glg");
-    lang_codes.insert("swahili", "swh");
-    lang_codes.insert("meadow mari", "mhr");
-    lang_codes.insert("afrikaans", "afr");
-    lang_codes.insert("kazakh", "kaz");
-    lang_codes.insert("kotava", "avk");
-    lang_codes.insert("latvian", "lvs");
-    lang_codes.insert("cornish", "cor");
-    lang_codes.insert("tigre", "tig");
-    lang_codes.insert("rohingya", "rhg");
-    lang_codes.insert("central kanuri", "knc");
-    lang_codes.insert("assamese", "asm");
-    lang_codes.insert("guarani", "grn");
-    lang_codes.insert("standard moroccan tamazight", "zgh");
-    lang_codes.insert("central dusun", "dtp");
-    lang_codes.insert("irish", "gle");
-    lang_codes.insert("north frisian", "frr");
-    lang_codes.insert("tashelhit", "shi");
-    lang_codes.insert("mongolian", "mon");
-    lang_codes.insert("chavacano", "cbk");
-    lang_codes.insert("albanian", "sqi");
-    lang_codes.insert("ilocano", "ilo");
-    lang_codes.insert("waray", "war");
-    lang_codes.insert("algerian arabic", "arq");
-    lang_codes.insert("urdu", "urd");
-    lang_codes.insert("khasi", "kha");
-    lang_codes.insert("ottoman turkish", "ota");
-    lang_codes.insert("khmer", "khm");
-    lang_codes.insert("nuer", "nus");
-    lang_codes.insert("guadeloupean creole french", "gcf");
-    lang_codes.insert("malay (vernacular)", "zlm");
-    lang_codes.insert("swabian", "swg");
-    lang_codes.insert("literary chinese", "lzh");
-    lang_codes.insert("ligurian", "lij");
-    lang_codes.insert("zaza", "zza");
-    lang_codes.insert("cebuano", "ceb");
-    lang_codes.insert("bosnian", "bos");
-    lang_codes.insert("welsh", "cym");
-    lang_codes.insert("chuvash", "chv");
-    lang_codes.insert("norwegian nynorsk", "nno");
-    lang_codes.insert("ladino", "lad");
-    lang_codes.insert("upper sorbian", "hsb");
-    lang_codes.insert("kapampangan", "pam");
-    lang_codes.insert("unknown", "unknown");
-    lang_codes.insert("ho", "hoc");
-    lang_codes.insert("picard", "pcd");
-    lang_codes.insert("old east slavic", "orv");
-    lang_codes.insert("hunsrik", "hrx");
-    lang_codes.insert("slovenian", "slv");
-    lang_codes.insert("ancient greek", "grc");
-    lang_codes.insert("egyptian arabic", "arz");
-    lang_codes.insert("lower sorbian", "dsb");
-    lang_codes.insert("scottish gaelic", "gla");
-    lang_codes.insert("javanese", "jav");
-    lang_codes.insert("southern kurdish", "sdh");
-    lang_codes.insert("old prussian", "prg");
-    lang_codes.insert("uzbek", "uzb");
-    lang_codes.insert("yakut", "sah");
-    lang_codes.insert("kashubian", "csb");
-    lang_codes.insert("wayuu", "guc");
-    lang_codes.insert("buryat", "bua");
-    lang_codes.insert("luxembourgish", "ltz");
-    lang_codes.insert("malayalam", "mal");
-    lang_codes.insert("romani", "rom");
-    lang_codes.insert("mingrelian", "xmf");
-    lang_codes.insert("kalmyk", "xal");
-    lang_codes.insert("piedmontese", "pms");
-    lang_codes.insert("naga (tangshang)", "nst");
-    lang_codes.insert("frisian", "fry");
-    lang_codes.insert("muskogee (creek)", "mus");
-    lang_codes.insert("tahaggart tamahaq", "thv");
-    lang_codes.insert("old tupi", "tpw");
-    lang_codes.insert("burmese", "mya");
-    lang_codes.insert("chukchi", "ckt");
-    lang_codes.insert("kven finnish", "fkv");
-    lang_codes.insert("tamil", "tam");
-    lang_codes.insert("swiss german", "gsw");
-    lang_codes.insert("novial", "nov");
-    lang_codes.insert("north moluccan malay", "max");
-    lang_codes.insert("quechua", "que");
-    lang_codes.insert("faroese", "fao");
-    lang_codes.insert("odia (oriya)", "ori");
-    lang_codes.insert("maori", "mri");
-    lang_codes.insert("old english", "ang");
-    lang_codes.insert("kyrgyz", "kir");
-    lang_codes.insert("talossan", "tzl");
-    lang_codes.insert("chamorro", "cha");
-    lang_codes.insert("crimean tatar", "crh");
-    lang_codes.insert("kelantan-pattani malay", "mfa");
-    lang_codes.insert("brithenig", "bzt");
-    lang_codes.insert("ainu", "ain");
-    lang_codes.insert("asturian", "ast");
-    lang_codes.insert("telugu", "tel");
-    lang_codes.insert("gothic", "got");
-    lang_codes.insert("xhosa", "xho");
-    lang_codes.insert("amharic", "amh");
-    lang_codes.insert("awadhi", "awa");
-    lang_codes.insert("maltese", "mlt");
-    lang_codes.insert("bashkir", "bak");
-    lang_codes.insert("tachawit", "shy");
-    lang_codes.insert("tarifit", "rif");
-    lang_codes.insert("bavarian", "bar");
-    lang_codes.insert("karachay-balkar", "krc");
-    lang_codes.insert("lao", "lao");
-    lang_codes.insert("jewish babylonian aramaic", "tmr");
-    lang_codes.insert("old french", "fro");
-    lang_codes.insert("nahuatl", "nah");
-    lang_codes.insert("northern sami", "sme");
-    lang_codes.insert("punjabi (eastern)", "pan");
-    lang_codes.insert("kannada", "kan");
-    lang_codes.insert("sranan tongo", "srn");
-    lang_codes.insert("karelian", "krl");
-    lang_codes.insert("venetian", "vec");
-    lang_codes.insert("hawaiian", "haw");
-    lang_codes.insert("sumerian", "sux");
-    lang_codes.insert("nepali", "npi");
-    lang_codes.insert("gujarati", "guj");
-    lang_codes.insert("nogai", "nog");
-    lang_codes.insert("sanskrit", "san");
-    lang_codes.insert("quenya", "qya");
-    lang_codes.insert("banjar", "bjn");
-    lang_codes.insert("emilian", "egl");
-    lang_codes.insert("láadan", "ldn");
-    lang_codes.insert("middle english", "enm");
-    lang_codes.insert("baluchi", "bal");
-    lang_codes.insert("ancient hebrew", "hbo");
-    lang_codes.insert("gulf arabic", "afb");
-    lang_codes.insert("somali", "som");
-    lang_codes.insert("saraiki", "skr");
-    lang_codes.insert("choctaw", "cho");
-    lang_codes.insert("wolof", "wol");
-    lang_codes.insert("kumyk", "kum");
-    lang_codes.insert("minangkabau", "min");
-    lang_codes.insert("greenlandic", "kal");
-    lang_codes.insert("laz", "lzz");
-    lang_codes.insert("rusyn", "rue");
-    lang_codes.insert("evenki", "evn");
-    lang_codes.insert("zulu", "zul");
-    lang_codes.insert("hitchiti", "mik");
-    lang_codes.insert("tigrinya", "tir");
-    lang_codes.insert("tetun", "tet");
-    lang_codes.insert("aragonese", "arg");
-    lang_codes.insert("north levantine arabic", "apc");
-    lang_codes.insert("kabardian", "kbd");
-    lang_codes.insert("saterland frisian", "stq");
-    lang_codes.insert("haitian creole", "hat");
-    lang_codes.insert("shuswap", "shs");
-    lang_codes.insert("tok pisin", "tpi");
-    lang_codes.insert("sindarin", "sjn");
-    lang_codes.insert("latgalian", "ltg");
-    lang_codes.insert("papiamento", "pap");
-    lang_codes.insert("scots", "sco");
-    lang_codes.insert("navajo", "nav");
-    lang_codes.insert("ladin", "lld");
-    lang_codes.insert("central mnong", "cmo");
-    lang_codes.insert("samoan", "smo");
-    lang_codes.insert("hill mari", "mrj");
-    lang_codes.insert("kölsch", "ksh");
-    lang_codes.insert("hmong daw (white)", "mww");
-    lang_codes.insert("afrihili", "afh");
-    lang_codes.insert("tuvinian", "tyv");
-    lang_codes.insert("baybayanon", "bvy");
-    lang_codes.insert("iban", "iba");
-    lang_codes.insert("mohawk", "moh");
-    lang_codes.insert("udmurt", "udm");
-    lang_codes.insert("moroccan arabic", "ary");
-    lang_codes.insert("erzya", "myv");
-    lang_codes.insert("seychellois creole", "crs");
-    lang_codes.insert("talysh", "tly");
-    lang_codes.insert("extremaduran", "ext");
-    lang_codes.insert("tajik", "tgk");
-    lang_codes.insert("malagasy", "mlg");
-    lang_codes.insert("nuosu", "iii");
-    lang_codes.insert("mambae", "mgm");
-    lang_codes.insert("yoruba", "yor");
-    lang_codes.insert("pashto", "pus");
-    lang_codes.insert("pipil", "ppl");
-    lang_codes.insert("lushootseed", "lut");
-    lang_codes.insert("southern sami", "sma");
-    lang_codes.insert("tibetan", "bod");
-    lang_codes.insert("dutton world speedwords", "dws");
-    lang_codes.insert("pennsylvania german", "pdc");
-    lang_codes.insert("mahasu pahari", "bfz");
-    lang_codes.insert("pangasinan", "pag");
-    lang_codes.insert("bhojpuri", "bho");
-    lang_codes.insert("isan", "tts");
-    lang_codes.insert("hakka chinese", "hak");
-    lang_codes.insert("walloon", "wln");
-    lang_codes.insert("chinook jargon", "chn");
-    lang_codes.insert("sinhala", "sin");
-    lang_codes.insert("berom", "bom");
-    lang_codes.insert("inuktitut", "ike");
-    lang_codes.insert("iraqi arabic", "acm");
-    lang_codes.insert("kashmiri", "kas");
-    lang_codes.insert("samogitian", "sgs");
-    lang_codes.insert("komi-zyrian", "kpv");
-    lang_codes.insert("limburgish", "lim");
-    lang_codes.insert("shona", "sna");
-    lang_codes.insert("hiligaynon", "hil");
-    lang_codes.insert("komi-permyak", "koi");
-    lang_codes.insert("guerrero nahuatl", "ngu");
-    lang_codes.insert("fijian", "fij");
-    lang_codes.insert("khakas", "kjh");
-    lang_codes.insert("okinawan", "ryu");
-    lang_codes.insert("setswana", "tsn");
-    lang_codes.insert("chechen", "che");
-    lang_codes.insert("dhivehi", "div");
-    lang_codes.insert("drents", "drt");
-    lang_codes.insert("manx", "glv");
-    lang_codes.insert("central huasteca nahuatl", "nch");
-    lang_codes.insert("punjabi (western)", "pnb");
-    lang_codes.insert("gagauz", "gag");
-    lang_codes.insert("cycl", "cycl");
-    lang_codes.insert("garhwali", "gbm");
-    lang_codes.insert("ojibwe", "oji");
-    lang_codes.insert("igbo", "ibo");
-    lang_codes.insert("niuean", "niu");
-    lang_codes.insert("nigerian fulfulde", "fuv");
-    lang_codes.insert("sicilian", "scn");
-    lang_codes.insert("palauan", "pau");
-    lang_codes.insert("fiji hindi", "hif");
-    lang_codes.insert("livonian", "liv");
-    lang_codes.insert("jamaican patois", "jam");
-    lang_codes.insert("friulian", "fur");
-    lang_codes.insert("rapa nui", "rap");
-    lang_codes.insert("adyghe", "ady");
-    lang_codes.insert("middle french", "frm");
-    lang_codes.insert("interglossa", "igs");
-    lang_codes.insert("abkhaz", "abk");
-    lang_codes.insert("sundanese", "sun");
-    lang_codes.insert("kinyarwanda", "kin");
-    lang_codes.insert("dungan", "dng");
-    lang_codes.insert("cayuga", "cay");
-    lang_codes.insert("umbundu", "umb");
-    lang_codes.insert("cherokee", "chr");
-    lang_codes.insert("tahitian", "tah");
-    lang_codes.insert("lombard", "lmo");
-    lang_codes.insert("aklanon", "akl");
-    lang_codes.insert("gheg albanian", "aln");
-    lang_codes.insert("bislama", "bis");
-    lang_codes.insert("o'odham", "ood");
-    lang_codes.insert("tagal murut", "mvv");
-    lang_codes.insert("marshallese", "mah");
-    lang_codes.insert("chinyanja", "nya");
-    lang_codes.insert("ewe", "ewe");
-    lang_codes.insert("lakota", "lkt");
-    lang_codes.insert("romansh", "roh");
-    lang_codes.insert("tongan", "ton");
-    lang_codes.insert("corsican", "cos");
-    lang_codes.insert("uab meto", "aoz");
-    lang_codes.insert("kekchi (q'eqchi')", "kek");
-    lang_codes.insert("avar", "ava");
-    lang_codes.insert("old aramaic", "oar");
-    lang_codes.insert("mirandese", "mwl");
-    lang_codes.insert("louisiana creole", "lou");
-    lang_codes.insert("ingrian", "izh");
-    lang_codes.insert("old spanish", "osp");
-    lang_codes.insert("old norse", "non");
-    lang_codes.insert("karakalpak", "kaa");
-    lang_codes.insert("khalaj", "klj");
-    lang_codes.insert("ingush", "inh");
-    lang_codes.insert("ngeq ", "ngt");
-    lang_codes.insert("dargwa", "dar");
-    lang_codes.insert("jin chinese", "cjy");
-    lang_codes.insert("mi'kmaq", "mic");
-    lang_codes.insert("newari", "new");
-    lang_codes.insert("jewish palestinian aramaic", "jpa");
-    lang_codes.insert("sardinian", "srd");
-    lang_codes.insert("lezgi", "lez");
-    lang_codes.insert("phoenician", "phn");
-    lang_codes.insert("tonga (zambezi)", "toi");
-    lang_codes.insert("võro", "vro");
-    lang_codes.insert("min nan chinese", "nan");
-    lang_codes.insert("tuvaluan", "tvl");
-    lang_codes.insert("gilbertese", "gil");
-    lang_codes.insert("orizaba nahuatl", "nlv");
-    lang_codes.insert("qashqai", "qxq");
-    lang_codes.insert("south levantine arabic", "ajp");
-    lang_codes.insert("lak", "lbe");
-    lang_codes.insert("bambara", "bam");
-    lang_codes.insert("old frisian", "ofs");
-    lang_codes.insert("southern altai", "alt");
-    lang_codes.insert("veps", "vep");
-    lang_codes.insert("erromintxela", "emx");
-    lang_codes.insert("karakhanid", "xqa");
-    lang_codes.insert("zeelandic", "zea");
-    lang_codes.insert("tokelauan", "tkl");
-    lang_codes.insert("abaza", "abq");
-    lang_codes.insert("bodo", "brx");
-    lang_codes.insert("nauruan", "nau");
-    lang_codes.insert("yucatec maya", "yua");
-    lang_codes.insert("silesian", "szl");
-    lang_codes.insert("southern subanen", "laa");
-    lang_codes.insert("kamba", "kam");
-    lang_codes.insert("mon", "mnw");
-    lang_codes.insert("juhuri (judeo-tat)", "jdt");
-    lang_codes.insert("moksha", "mdf");
-    lang_codes.insert("sango", "sag");
-    lang_codes.insert("chagatai", "chg");
-    lang_codes.insert("madurese", "mad");
-    lang_codes.insert("maithili", "mai");
-    lang_codes.insert("pulaar", "fuc");
-    lang_codes.insert("k'iche'", "quc");
-    lang_codes.insert("chinese pidgin english", "cpi");
-    lang_codes.insert("old turkish", "otk");
-    lang_codes.insert("assyrian neo-aramaic", "aii");
-    lang_codes.insert("sindhi", "snd");
-    lang_codes.insert("northern zaza (kirmanjki)", "kiu");
-    lang_codes.insert("southern zaza (dimli)", "diq");
-    lang_codes.insert("balinese", "ban");
-    lang_codes.insert("morisyen", "mfe");
-    lang_codes.insert("central bikol", "bcl");
-    lang_codes.insert("middle persian (pahlavi)", "pal");
-    lang_codes.insert("temuan", "tmw");
-    lang_codes.insert("xiang chinese", "hsn");
-    lang_codes.insert("hmong njua (green)", "hnj");
-    lang_codes.insert("konkani (goan)", "gom");
-    lang_codes.insert("plains cree", "crk");
-    lang_codes.insert("keningau murut", "kxi");
-    lang_codes.insert("tsonga", "tso");
-    lang_codes.insert("old saxon", "osx");
-    lang_codes.insert("palatine german", "pfl");
-    lang_codes.insert("syriac", "syc");
-    lang_codes.insert("libyan arabic", "ayl");
-    lang_codes.insert("mono (usa)", "mnr");
-    lang_codes.insert("meitei", "mni");
-    lang_codes.insert("gan chinese", "gan");
-    lang_codes.insert("northern haida", "hdn");
-    lang_codes.insert("ga", "gaa");
-    lang_codes.insert("luganda", "lug");
-    lang_codes.insert("southern sotho", "sot");
-    lang_codes.insert("aymara", "aym");
-    lang_codes.insert("nyungar", "nys");
-    lang_codes.insert("neapolitan", "nap");
-    lang_codes.insert("manchu", "mnc");
-    lang_codes.insert("pali", "pli");
-    lang_codes.insert("urhobo", "urh");
-    lang_codes.insert("rendille", "rel");
-    lang_codes.insert("southern haida", "hax");
-    lang_codes.insert("swazi", "ssw");
-    lang_codes.insert("cuyonon", "cyo");
+    let lang_codes = HashMap::from([
+                                   ("abkhaz", "abk"),
+                                   ("abaza", "abq"),
+                                   ("iraqi arabic", "acm"),
+                                   ("adyghe", "ady"),
+                                   ("gulf arabic", "afb"),
+                                   ("afrihili", "afh"),
+                                   ("afrikaans", "afr"),
+                                   ("assyrian neo-aramaic", "aii"),
+                                   ("ainu", "ain"),
+                                   ("south levantine arabic", "ajp"),
+                                   ("aklanon", "akl"),
+                                   ("gheg albanian", "aln"),
+                                   ("southern altai", "alt"),
+                                   ("amharic", "amh"),
+                                   ("old english", "ang"),
+                                   ("uab meto", "aoz"),
+                                   ("north levantine arabic", "apc"),
+                                   ("arabic", "ara"),
+                                   ("aragonese", "arg"),
+                                   ("algerian arabic", "arq"),
+                                   ("moroccan arabic", "ary"),
+                                   ("egyptian arabic", "arz"),
+                                   ("assamese", "asm"),
+                                   ("asturian", "ast"),
+                                   ("avar", "ava"),
+                                   ("kotava", "avk"),
+                                   ("awadhi", "awa"),
+                                   ("libyan arabic", "ayl"),
+                                   ("aymara", "aym"),
+                                   ("azerbaijani", "aze"),
+                                   ("bashkir", "bak"),
+                                   ("baluchi", "bal"),
+                                   ("bambara", "bam"),
+                                   ("balinese", "ban"),
+                                   ("bavarian", "bar"),
+                                   ("central bikol", "bcl"),
+                                   ("belarusian", "bel"),
+                                   ("bengali", "ben"),
+                                   ("berber", "ber"),
+                                   ("mahasu pahari", "bfz"),
+                                   ("bhojpuri", "bho"),
+                                   ("bislama", "bis"),
+                                   ("banjar", "bjn"),
+                                   ("tibetan", "bod"),
+                                   ("berom", "bom"),
+                                   ("bosnian", "bos"),
+                                   ("breton", "bre"),
+                                   ("bodo", "brx"),
+                                   ("buryat", "bua"),
+                                   ("bulgarian", "bul"),
+                                   ("baybayanon", "bvy"),
+                                   ("brithenig", "bzt"),
+                                   ("catalan", "cat"),
+                                   ("cayuga", "cay"),
+                                   ("chavacano", "cbk"),
+                                   ("cebuano", "ceb"),
+                                   ("czech", "ces"),
+                                   ("chamorro", "cha"),
+                                   ("chechen", "che"),
+                                   ("chagatai", "chg"),
+                                   ("chinook jargon", "chn"),
+                                   ("choctaw", "cho"),
+                                   ("cherokee", "chr"),
+                                   ("chuvash", "chv"),
+                                   ("jin chinese", "cjy"),
+                                   ("central kurdish (soranî)", "ckb"),
+                                   ("chukchi", "ckt"),
+                                   ("mandarin chinese", "cmn"),
+                                   ("central mnong", "cmo"),
+                                   ("cornish", "cor"),
+                                   ("corsican", "cos"),
+                                   ("chinese pidgin english", "cpi"),
+                                   ("crimean tatar", "crh"),
+                                   ("plains cree", "crk"),
+                                   ("seychellois creole", "crs"),
+                                   ("kashubian", "csb"),
+                                   ("cycl", "cycl"),
+                                   ("welsh", "cym"),
+                                   ("cuyonon", "cyo"),
+                                   ("danish", "dan"),
+                                   ("dargwa", "dar"),
+                                   ("german", "deu"),
+                                   ("southern zaza (dimli)", "diq"),
+                                   ("dhivehi", "div"),
+                                   ("dungan", "dng"),
+                                   ("drents", "drt"),
+                                   ("lower sorbian", "dsb"),
+                                   ("central dusun", "dtp"),
+                                   ("dutton world speedwords", "dws"),
+                                   ("emilian", "egl"),
+                                   ("greek", "ell"),
+                                   ("erromintxela", "emx"),
+                                   ("english", "eng"),
+                                   ("middle english", "enm"),
+                                   ("esperanto", "epo"),
+                                   ("estonian", "est"),
+                                   ("basque", "eus"),
+                                   ("evenki", "evn"),
+                                   ("ewe", "ewe"),
+                                   ("extremaduran", "ext"),
+                                   ("faroese", "fao"),
+                                   ("fijian", "fij"),
+                                   ("finnish", "fin"),
+                                   ("kven finnish", "fkv"),
+                                   ("french", "fra"),
+                                   ("middle french", "frm"),
+                                   ("old french", "fro"),
+                                   ("north frisian", "frr"),
+                                   ("frisian", "fry"),
+                                   ("pulaar", "fuc"),
+                                   ("friulian", "fur"),
+                                   ("nigerian fulfulde", "fuv"),
+                                   ("ga", "gaa"),
+                                   ("gagauz", "gag"),
+                                   ("gan chinese", "gan"),
+                                   ("garhwali", "gbm"),
+                                   ("guadeloupean creole french", "gcf"),
+                                   ("gilbertese", "gil"),
+                                   ("scottish gaelic", "gla"),
+                                   ("irish", "gle"),
+                                   ("galician", "glg"),
+                                   ("manx", "glv"),
+                                   ("konkani (goan)", "gom"),
+                                   ("gronings", "gos"),
+                                   ("gothic", "got"),
+                                   ("ancient greek", "grc"),
+                                   ("guarani", "grn"),
+                                   ("swiss german", "gsw"),
+                                   ("wayuu", "guc"),
+                                   ("gujarati", "guj"),
+                                   ("hakka chinese", "hak"),
+                                   ("haitian creole", "hat"),
+                                   ("hausa", "hau"),
+                                   ("hawaiian", "haw"),
+                                   ("southern haida", "hax"),
+                                   ("ancient hebrew", "hbo"),
+                                   ("northern haida", "hdn"),
+                                   ("hebrew", "heb"),
+                                   ("fiji hindi", "hif"),
+                                   ("hiligaynon", "hil"),
+                                   ("hindi", "hin"),
+                                   ("hmong njua (green)", "hnj"),
+                                   ("ho", "hoc"),
+                                   ("croatian", "hrv"),
+                                   ("hunsrik", "hrx"),
+                                   ("upper sorbian", "hsb"),
+                                   ("xiang chinese", "hsn"),
+                                   ("hungarian", "hun"),
+                                   ("armenian", "hye"),
+                                   ("iban", "iba"),
+                                   ("igbo", "ibo"),
+                                   ("ido", "ido"),
+                                   ("interglossa", "igs"),
+                                   ("nuosu", "iii"),
+                                   ("inuktitut", "ike"),
+                                   ("interlingue", "ile"),
+                                   ("ilocano", "ilo"),
+                                   ("interlingua", "ina"),
+                                   ("indonesian", "ind"),
+                                   ("ingush", "inh"),
+                                   ("icelandic", "isl"),
+                                   ("italian", "ita"),
+                                   ("ingrian", "izh"),
+                                   ("jamaican patois", "jam"),
+                                   ("javanese", "jav"),
+                                   ("lojban", "jbo"),
+                                   ("juhuri (judeo-tat)", "jdt"),
+                                   ("jewish palestinian aramaic", "jpa"),
+                                   ("japanese", "jpn"),
+                                   ("karakalpak", "kaa"),
+                                   ("kabyle", "kab"),
+                                   ("greenlandic", "kal"),
+                                   ("kamba", "kam"),
+                                   ("kannada", "kan"),
+                                   ("kashmiri", "kas"),
+                                   ("georgian", "kat"),
+                                   ("kazakh", "kaz"),
+                                   ("kabardian", "kbd"),
+                                   ("kekchi (q'eqchi')", "kek"),
+                                   ("khasi", "kha"),
+                                   ("khmer", "khm"),
+                                   ("kinyarwanda", "kin"),
+                                   ("kyrgyz", "kir"),
+                                   ("northern zaza (kirmanjki)", "kiu"),
+                                   ("khakas", "kjh"),
+                                   ("khalaj", "klj"),
+                                   ("northern kurdish (kurmancî)", "kmr"),
+                                   ("central kanuri", "knc"),
+                                   ("komi-permyak", "koi"),
+                                   ("korean", "kor"),
+                                   ("komi-zyrian", "kpv"),
+                                   ("karachay-balkar", "krc"),
+                                   ("karelian", "krl"),
+                                   ("kölsch", "ksh"),
+                                   ("kumyk", "kum"),
+                                   ("keningau murut", "kxi"),
+                                   ("coastal kadazan", "kzj"),
+                                   ("southern subanen", "laa"),
+                                   ("ladino", "lad"),
+                                   ("lao", "lao"),
+                                   ("latin", "lat"),
+                                   ("lak", "lbe"),
+                                   ("láadan", "ldn"),
+                                   ("lezgi", "lez"),
+                                   ("lingua franca nova", "lfn"),
+                                   ("ligurian", "lij"),
+                                   ("limburgish", "lim"),
+                                   ("lingala", "lin"),
+                                   ("lithuanian", "lit"),
+                                   ("livonian", "liv"),
+                                   ("lakota", "lkt"),
+                                   ("ladin", "lld"),
+                                   ("lombard", "lmo"),
+                                   ("louisiana creole", "lou"),
+                                   ("latgalian", "ltg"),
+                                   ("luxembourgish", "ltz"),
+                                   ("luganda", "lug"),
+                                   ("lushootseed", "lut"),
+                                   ("latvian", "lvs"),
+                                   ("literary chinese", "lzh"),
+                                   ("laz", "lzz"),
+                                   ("madurese", "mad"),
+                                   ("marshallese", "mah"),
+                                   ("maithili", "mai"),
+                                   ("malayalam", "mal"),
+                                   ("marathi", "mar"),
+                                   ("north moluccan malay", "max"),
+                                   ("moksha", "mdf"),
+                                   ("kelantan-pattani malay", "mfa"),
+                                   ("morisyen", "mfe"),
+                                   ("mambae", "mgm"),
+                                   ("meadow mari", "mhr"),
+                                   ("mi'kmaq", "mic"),
+                                   ("hitchiti", "mik"),
+                                   ("minangkabau", "min"),
+                                   ("macedonian", "mkd"),
+                                   ("malagasy", "mlg"),
+                                   ("maltese", "mlt"),
+                                   ("manchu", "mnc"),
+                                   ("meitei", "mni"),
+                                   ("mono (usa)", "mnr"),
+                                   ("mon", "mnw"),
+                                   ("mohawk", "moh"),
+                                   ("mongolian", "mon"),
+                                   ("maori", "mri"),
+                                   ("hill mari", "mrj"),
+                                   ("muskogee (creek)", "mus"),
+                                   ("tagal murut", "mvv"),
+                                   ("mirandese", "mwl"),
+                                   ("hmong daw (white)", "mww"),
+                                   ("burmese", "mya"),
+                                   ("erzya", "myv"),
+                                   ("nahuatl", "nah"),
+                                   ("min nan chinese", "nan"),
+                                   ("neapolitan", "nap"),
+                                   ("nauruan", "nau"),
+                                   ("navajo", "nav"),
+                                   ("central huasteca nahuatl", "nch"),
+                                   ("low german (low saxon)", "nds"),
+                                   ("newari", "new"),
+                                   ("ngeq ", "ngt"),
+                                   ("guerrero nahuatl", "ngu"),
+                                   ("niuean", "niu"),
+                                   ("dutch", "nld"),
+                                   ("orizaba nahuatl", "nlv"),
+                                   ("nande", "nnb"),
+                                   ("norwegian nynorsk", "nno"),
+                                   ("norwegian bokmål", "nob"),
+                                   ("nogai", "nog"),
+                                   ("old norse", "non"),
+                                   ("novial", "nov"),
+                                   ("nepali", "npi"),
+                                   ("naga (tangshang)", "nst"),
+                                   ("nuer", "nus"),
+                                   ("chinyanja", "nya"),
+                                   ("nyungar", "nys"),
+                                   ("old aramaic", "oar"),
+                                   ("occitan", "oci"),
+                                   ("old frisian", "ofs"),
+                                   ("ojibwe", "oji"),
+                                   ("o'odham", "ood"),
+                                   ("odia (oriya)", "ori"),
+                                   ("old east slavic", "orv"),
+                                   ("old spanish", "osp"),
+                                   ("ossetian", "oss"),
+                                   ("old saxon", "osx"),
+                                   ("ottoman turkish", "ota"),
+                                   ("old turkish", "otk"),
+                                   ("pangasinan", "pag"),
+                                   ("middle persian (pahlavi)", "pal"),
+                                   ("kapampangan", "pam"),
+                                   ("punjabi (eastern)", "pan"),
+                                   ("papiamento", "pap"),
+                                   ("palauan", "pau"),
+                                   ("picard", "pcd"),
+                                   ("pennsylvania german", "pdc"),
+                                   ("persian", "pes"),
+                                   ("palatine german", "pfl"),
+                                   ("phoenician", "phn"),
+                                   ("pali", "pli"),
+                                   ("piedmontese", "pms"),
+                                   ("punjabi (western)", "pnb"),
+                                   ("polish", "pol"),
+                                   ("portuguese", "por"),
+                                   ("pipil", "ppl"),
+                                   ("old prussian", "prg"),
+                                   ("pashto", "pus"),
+                                   ("k'iche'", "quc"),
+                                   ("quechua", "que"),
+                                   ("qashqai", "qxq"),
+                                   ("quenya", "qya"),
+                                   ("rapa nui", "rap"),
+                                   ("rendille", "rel"),
+                                   ("rohingya", "rhg"),
+                                   ("tarifit", "rif"),
+                                   ("romansh", "roh"),
+                                   ("romani", "rom"),
+                                   ("romanian", "ron"),
+                                   ("rusyn", "rue"),
+                                   ("kirundi", "run"),
+                                   ("russian", "rus"),
+                                   ("okinawan", "ryu"),
+                                   ("sango", "sag"),
+                                   ("yakut", "sah"),
+                                   ("sanskrit", "san"),
+                                   ("santali", "sat"),
+                                   ("sicilian", "scn"),
+                                   ("scots", "sco"),
+                                   ("southern kurdish", "sdh"),
+                                   ("samogitian", "sgs"),
+                                   ("tashelhit", "shi"),
+                                   ("shuswap", "shs"),
+                                   ("tachawit", "shy"),
+                                   ("sinhala", "sin"),
+                                   ("sindarin", "sjn"),
+                                   ("saraiki", "skr"),
+                                   ("slovak", "slk"),
+                                   ("slovenian", "slv"),
+                                   ("southern sami", "sma"),
+                                   ("northern sami", "sme"),
+                                   ("samoan", "smo"),
+                                   ("shona", "sna"),
+                                   ("sindhi", "snd"),
+                                   ("somali", "som"),
+                                   ("southern sotho", "sot"),
+                                   ("spanish", "spa"),
+                                   ("albanian", "sqi"),
+                                   ("sardinian", "srd"),
+                                   ("sranan tongo", "srn"),
+                                   ("serbian", "srp"),
+                                   ("swazi", "ssw"),
+                                   ("saterland frisian", "stq"),
+                                   ("sundanese", "sun"),
+                                   ("sumerian", "sux"),
+                                   ("congo swahili", "swc"),
+                                   ("swedish", "swe"),
+                                   ("swabian", "swg"),
+                                   ("swahili", "swh"),
+                                   ("syriac", "syc"),
+                                   ("silesian", "szl"),
+                                   ("tahitian", "tah"),
+                                   ("tamil", "tam"),
+                                   ("tatar", "tat"),
+                                   ("telugu", "tel"),
+                                   ("tetun", "tet"),
+                                   ("tajik", "tgk"),
+                                   ("tagalog", "tgl"),
+                                   ("thai", "tha"),
+                                   ("tahaggart tamahaq", "thv"),
+                                   ("tigre", "tig"),
+                                   ("tigrinya", "tir"),
+                                   ("tokelauan", "tkl"),
+                                   ("klingon", "tlh"),
+                                   ("talysh", "tly"),
+                                   ("jewish babylonian aramaic", "tmr"),
+                                   ("temuan", "tmw"),
+                                   ("tonga (zambezi)", "toi"),
+                                   ("toki pona", "tok"),
+                                   ("tongan", "ton"),
+                                   ("tok pisin", "tpi"),
+                                   ("old tupi", "tpw"),
+                                   ("setswana", "tsn"),
+                                   ("tsonga", "tso"),
+                                   ("isan", "tts"),
+                                   ("turkmen", "tuk"),
+                                   ("turkish", "tur"),
+                                   ("tuvaluan", "tvl"),
+                                   ("tuvinian", "tyv"),
+                                   ("talossan", "tzl"),
+                                   ("udmurt", "udm"),
+                                   ("uyghur", "uig"),
+                                   ("ukrainian", "ukr"),
+                                   ("umbundu", "umb"),
+                                   ("urdu", "urd"),
+                                   ("urhobo", "urh"),
+                                   ("uzbek", "uzb"),
+                                   ("venetian", "vec"),
+                                   ("veps", "vep"),
+                                   ("vietnamese", "vie"),
+                                   ("volapük", "vol"),
+                                   ("võro", "vro"),
+                                   ("waray", "war"),
+                                   ("walloon", "wln"),
+                                   ("wolof", "wol"),
+                                   ("shanghainese", "wuu"),
+                                   ("kalmyk", "xal"),
+                                   ("xhosa", "xho"),
+                                   ("mingrelian", "xmf"),
+                                   ("karakhanid", "xqa"),
+                                   ("yiddish", "yid"),
+                                   ("yoruba", "yor"),
+                                   ("yucatec maya", "yua"),
+                                   ("cantonese", "yue"),
+                                   ("zeelandic", "zea"),
+                                   ("standard moroccan tamazight", "zgh"),
+                                   ("malay (vernacular)", "zlm"),
+                                   ("malay", "zsm"),
+                                   ("zulu", "zul"),
+                                   ("zaza", "zza"),
+                                   ]);
 
     lang_codes
 }
