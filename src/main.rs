@@ -2,7 +2,7 @@ use std::io;
 use std::io::Write;
 use std::env;
 use std::time::Instant;
-use rand::prelude::*;
+use rand::Rng;
 use minreq;
 use unescaper;
 mod langs;
@@ -27,7 +27,7 @@ fn main() {
     }
     print!("Fetching sentences for you...");
     io::stdout().flush().unwrap();
-
+    
     let now = Instant::now();
 
     let language_request = language_input.to_lowercase().to_string();
@@ -51,7 +51,7 @@ fn main() {
     play(sentences, len, language);
 }
 
-fn http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
+fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
     let request = "https://tatoeba.org/en/api_v0/search?from=eng&orphans=no&sort=random&to=".to_owned()+language+"&unapproved=no";
     let response = minreq::get(request).send()?;
 
@@ -64,13 +64,18 @@ fn http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
     Ok(sentences)
 }
 
+fn _definition_http_request() {
+   // TODO: would be hard to implement but maybe get definition from wiktionary wikimedia API?
+}
+
 fn generate_sentences(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
-    let mut sentences = http_request(language).unwrap();
+    let mut sentences = sentences_http_request(language).unwrap();
     let len = sentences.len();
 
     if len != 9 {
         let difference = 9 - len;
-        let mut sentences_difference = http_request(language).unwrap().into_iter().take(difference).collect::<Vec<_>>();
+        let mut sentences_difference = sentences_http_request(language).unwrap()
+            .into_iter().take(difference).collect::<Vec<_>>();
 
         sentences.append(&mut sentences_difference);
     }
@@ -80,51 +85,59 @@ fn generate_sentences(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
 fn play(sentences: Vec<Sentence>, len: usize, language: String) {
     let mut correct = 0;
     let non_spaced = ["cmn", "lzh", "hak", "cjy", "nan", "hsn", "gan", "jpn", "tha", "khm", "lao", "mya"];
-
     for sentence in sentences {
         let mut cropped = sentence.translation;
         cropped.pop();
 
         println!();
 
-        let rand = &mut rand::thread_rng();
-        let words: Vec<String>;
+        let words: String;
 
         let is_non_spaced = non_spaced.iter().any(|x| x == &language);
 
+        let mut rng = rand::thread_rng();
+        let raw_word: String;
+        let index: usize;
+
         if is_non_spaced {
-            words = cropped.chars().map(|x| x.to_string()).collect::<Vec<String>>();
+            let chars = cropped.chars().map(|x| x.to_string());
+            words = chars.collect::<String>();
+            index = rng.gen_range(0..words.len());
+            raw_word = cropped.chars().map(|x| x.to_string())
+                .collect::<Vec<String>>().iter()
+                .nth(index)
+                .unwrap()
+                .to_string();
         }
         else {
-            words = cropped.split(' ').map(|x| x.to_string()).collect::<Vec<String>>();
+            let split_whitespace = cropped.split(" ");
+            words = split_whitespace.map(|x| x.to_string() + " ").collect::<String>();
+            let length = cropped.split(" ").collect::<Vec<_>>().len();
+            index = rng.gen_range(0..length);
+            raw_word = cropped.split(" ")
+                .collect::<Vec<_>>()
+                .into_iter()
+                .nth(index)
+                .unwrap()
+                .to_string();
         }
 
-        let mut shuffled = words.clone();
-        shuffled.shuffle(rand);
+        // remove punctuation
+        let word = raw_word.replace(&['(', ')', ',', '.', ';', ':'][..], "");
 
-        let word = &shuffled[0];
+        // how many underscores to print
+        let underscores = vec!['_'; word.chars().count()].into_iter().collect::<String>();
 
-        for i in words {
-            if &i.to_string() == word {
-                for _j in word.chars() {
-                        print!("_");
-                }
-                if !is_non_spaced {
-                    print!(" ");
-                }
-            }
-            else if !is_non_spaced {
-                print!("{} ", i);
-            }
-            else {
-                print!("{}", i);
-            }
-        }
+        let mut halved = words.split(&word).collect::<Vec<&str>>().into_iter();
+
+        println!("{} {} {}", halved.next().unwrap(), underscores, halved.last().unwrap());
 
         println!("\n{}", sentence.text);
 
         let mut guess = String::new();
+
         io::stdin().read_line(&mut guess).unwrap();
+
         if guess.trim().to_lowercase().contains(&word.to_lowercase()) {
             correct += 1;
             println!("Correct.\n");
@@ -182,6 +195,7 @@ impl Sentence {
 
         let translation_start = text_positions[1]+7;
         let try_translation_end = &string[translation_start..].find(",\"l");
+
         if let Some(x) = try_translation_end {
             let translation_end = x+translation_start;
             Sentence {
