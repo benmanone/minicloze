@@ -53,12 +53,13 @@ fn main() {
     // to display how long fetching sentences takes
     let now = Instant::now();
 
-    let language_request = language_input.to_lowercase().to_string();
+    let language_request = language_input.to_lowercase();
+
     // get the correct code for the input language
     // TODO: autocorrect obvious mistakes (e.g. frnech vs french) and "mistakes" (e.g. mandarin vs
     // mandarin chinese)
     let language = lang_codes
-        .get(&language_request)
+        .get(&language_request.as_str())
         .expect("Please enter a valid language")
         .to_string();
 
