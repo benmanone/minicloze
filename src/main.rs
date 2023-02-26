@@ -323,7 +323,8 @@ fn parse_unicode(string: &str) -> String {
     let mut chars: Vec<char> = Vec::new();
 
     while i < string.len() {
-        if string.as_bytes()[i] as char == '\\' {
+        // " breaks unespace for some reason
+        if string.as_bytes()[i] as char == '\\' && string.as_bytes()[i+1] != '"' as u8 {
             let number = &string[i + 2..i + 6];
             let format = "\\".to_owned() + "u" + "{" + number + "}";
 
@@ -340,7 +341,8 @@ fn parse_unicode(string: &str) -> String {
             i += 1;
         }
     }
-    chars.into_iter().collect()
+    // manually replace ". disgusting.
+    chars.into_iter().collect::<String>().replace("\\\"", "\"")
 }
 
 fn blank() -> Sentence {
