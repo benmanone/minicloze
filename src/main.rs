@@ -18,57 +18,49 @@ use minreq;
 use unescaper;
 
 // where the language names : codes are kept.
-// very long list of vector insert statements
+// very long list of Vec insert statements
 mod langs;
 
 fn main() {
     // arguments for if you are building locally
-    let args: Vec<_>  = env::args().collect();
-    
+    let args: Vec<_> = env::args().collect();
+
     // gets the tatoeba language codes from a seperate file
     let lang_codes = langs::propagate();
 
-    // what language to study
-    let mut language_input: String;
-
     // if arguments are passed
-    if args.len() > 1 {
+    let language_input = if args.len() > 1 {
         // the input from the command line
-        language_input = (&args[1]).to_string();
+        (&args[1]).to_string()
     }
     // if compiled script is run
     else {
-        language_input = String::new();
+        let mut input = String::new();
 
         print!("What language do you want to study? ");
 
         // allows multiple outputs on the same line
         io::stdout().flush().unwrap();
         // user input
-        io::stdin().read_line(&mut language_input).unwrap();
+        io::stdin().read_line(&mut input).unwrap();
 
-        language_input = language_input.trim_start().trim_end().to_string();
-    }
+        input = input.trim_start().trim_end().to_string();
+        input
+    };
     print!("Fetching sentences for you...");
     io::stdout().flush().unwrap();
-    
+
     // to display how long fetching sentences takes
     let now = Instant::now();
 
     let language_request = language_input.to_lowercase().to_string();
     // get the correct code for the input language
-    let language_opt = lang_codes.get(&language_request);
-    let language;
-
-    // check they actually entered a valid language
     // TODO: autocorrect obvious mistakes (e.g. frnech vs french) and "mistakes" (e.g. mandarin vs
     // mandarin chinese)
-    if let Some(x) = language_opt {
-        language = x.to_string();
-    }
-    else {
-        panic!("Please enter a valid language");
-    }
+    let language = lang_codes
+        .get(&language_request)
+        .expect("Please enter a valid language")
+        .to_string();
 
     // gets sentences for the correct language
     let sentences = generate_sentences(&language).unwrap();
@@ -76,17 +68,24 @@ fn main() {
 
     let elapsed = now.elapsed();
 
-    print!(" Processing complete in {:.2?}, {} sentences parsed.\n", elapsed, len);
+    println!(
+        " Processing complete in {:.2?}, {} sentences parsed.",
+        elapsed, len
+    );
 
-    // actually play the game
-    play(sentences, len, language);
+    start_game(sentences, len, language);
 }
 
 // https requests tatoeba
 // language: the language to request from tatoeba
 fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
     // the request string we send to tatoeba
-    let request = "https://tatoeba.org/en/api_v0/search?from=eng&orphans=no&sort=random&to=".to_owned()+language+"&unapproved=no";
+    let request = format!(
+        "{}{}{}",
+        "https://tatoeba.org/en/api_v0/search?from=eng&orphans=no&sort=random&to=",
+        language,
+        "&unapproved=no"
+    );
     // the json response string we get back from tatoeba
     let response = minreq::get(request).send()?;
 
@@ -94,10 +93,10 @@ fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error
     let rep_string = response.as_str()?;
 
     // where the results actually begin in the json response
-    let results_start = 1+get_char_locations(rep_string, '[')[1];
+    let results_start = 1 + get_char_locations(rep_string, '[')[1];
 
     // cut out the irrelevant information from the response
-    let results = &rep_string[results_start..rep_string.len()-2];
+    let results = &rep_string[results_start..rep_string.len() - 2];
     // extract a Vec of sentences from this plaintext
     let sentences = parse(results);
     Ok(sentences)
@@ -105,7 +104,7 @@ fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error
 
 // potential feature. ignore.
 fn _definition_http_request() {
-   // TODO: would be hard to implement but maybe get definition from wiktionary wikimedia API?
+    // TODO: would be hard to implement but maybe get definition from wiktionary wikimedia API?
 }
 
 // actually requests from tatoeba and formats it (basically just runs other functions)
@@ -119,8 +118,11 @@ fn generate_sentences(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
     if len != 9 {
         let difference = 9 - len;
         // makes more requests if required
-        let mut sentences_difference = sentences_http_request(language).unwrap()
-            .into_iter().take(difference).collect::<Vec<_>>();
+        let mut sentences_difference = sentences_http_request(language)
+            .unwrap()
+            .into_iter()
+            .take(difference)
+            .collect::<Vec<_>>();
 
         sentences.append(&mut sentences_difference);
     }
@@ -131,11 +133,13 @@ fn generate_sentences(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
 // sentences: sentences for the game
 // len: how many sentences there are. almost always 9
 // language: what language the game is in
-fn play(sentences: Vec<Sentence>, len: usize, language: String) {
+fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
     // for a correct count at the end
     let mut correct = 0;
     // languages which don't use spaces. require some different logic
-    let non_spaced = ["cmn", "lzh", "hak", "cjy", "nan", "hsn", "gan", "jpn", "tha", "khm", "lao", "mya"];
+    let non_spaced = [
+        "cmn", "lzh", "hak", "cjy", "nan", "hsn", "gan", "jpn", "tha", "khm", "lao", "mya",
+    ];
     for sentence in sentences {
         // just the sentence's original text
         let mut cropped = sentence.translation;
@@ -162,23 +166,28 @@ fn play(sentences: Vec<Sentence>, len: usize, language: String) {
             // index of the random word
             index = rng.gen_range(0..words.len());
             // doesn't work right now. should do the same as raw_word below
-            raw_word = cropped.chars().map(|x| x.to_string())
-                .collect::<Vec<String>>().iter()
+            raw_word = cropped
+                .chars()
+                .map(|x| x.to_string())
+                .collect::<Vec<String>>()
+                .iter()
                 .nth(index)
                 .unwrap()
                 .to_string();
-        }
-        else {
+        } else {
             // get "words"
             let split_whitespace = cropped.split(" ");
             // convert the split to a string
-            words = split_whitespace.map(|x| x.to_string() + " ").collect::<String>();
+            words = split_whitespace
+                .map(|x| x.to_string() + " ")
+                .collect::<String>();
             // how many words there are
             let length = cropped.split(" ").collect::<Vec<_>>().len();
             // index of the random word
             index = rng.gen_range(0..length);
             // get the random word. it's "raw" because punctuation hasn't been removed yet.
-            raw_word = cropped.split(" ")
+            raw_word = cropped
+                .split(" ")
                 .collect::<Vec<_>>()
                 .into_iter()
                 .nth(index)
@@ -190,13 +199,20 @@ fn play(sentences: Vec<Sentence>, len: usize, language: String) {
         let word = raw_word.replace(&['(', ')', ',', '.', ';', ':'][..], "");
 
         // how many underscores to print
-        let underscores = vec!['_'; word.chars().count()].into_iter().collect::<String>();
+        let underscores = vec!['_'; word.chars().count()]
+            .into_iter()
+            .collect::<String>();
 
         // split the sentence along the random word
         let mut halved = words.split(&word).collect::<Vec<&str>>().into_iter();
 
         // print either side and in the middle the underscores
-        println!("{} {} {}", halved.next().unwrap(), underscores, halved.last().unwrap());
+        println!(
+            "{} {} {}",
+            halved.next().unwrap(),
+            underscores,
+            halved.last().unwrap()
+        );
 
         // the english translation
         println!("\n{}", sentence.text);
@@ -210,8 +226,7 @@ fn play(sentences: Vec<Sentence>, len: usize, language: String) {
         if guess.trim().to_lowercase().contains(&word.to_lowercase()) {
             correct += 1;
             println!("Correct.\n");
-        }
-        else {
+        } else {
             println!("Wrong, {}.\n", word);
         }
     }
@@ -223,11 +238,14 @@ fn play(sentences: Vec<Sentence>, len: usize, language: String) {
 fn parse(results: &str) -> Vec<Sentence> {
     let mut sentences = Vec::new();
     let mut raw = results;
-    
+
     // there is a new sentence every second instance of },
     // sentence_and_remainder yields both halves of results split at 2nd },
     for _i in 1..10 {
-        let sentence_and_remainder = raw.match_indices("},{").nth(0).map(|(index, _)| raw.split_at(index));
+        let sentence_and_remainder = raw
+            .match_indices("},{")
+            .nth(0)
+            .map(|(index, _)| raw.split_at(index));
 
         if let Some(s) = sentence_and_remainder {
             // make sure the final bracket is there
@@ -238,8 +256,7 @@ fn parse(results: &str) -> Vec<Sentence> {
             // make sure it's a valid sentence (not a blank() which was rejected for some reason)
             if sentence.id != -1 {
                 sentences.push(sentence);
-            }
-            else {
+            } else {
                 // TODO: instead get a count of how many sentences were rejected
                 print!(" Sentence rejected...");
             }
@@ -262,35 +279,36 @@ impl Sentence {
     fn new(string: &String) -> Sentence {
         // where "text" shows up in the response. take a look at a tatoeba api response if you want
         // a better understanding
-        let text_positions: Vec<usize> = string.match_indices("text").map(|(i, _)|i).collect();
+        let text_positions: Vec<usize> = string.match_indices("text").map(|(i, _)| i).collect();
 
         // if there's not an english translation text
         if text_positions.len() < 2 {
-            return blank()
+            return blank();
         }
 
         // where "id" shows up
         let id_position = string.find("id").unwrap();
 
         // get the start-end of the text
-        let text_start = text_positions[0]+7;
-        let text_end = &string[text_start..].find(",\"l").unwrap()+text_start;
+        let text_start = text_positions[0] + 7;
+        let text_end = &string[text_start..].find(",\"l").unwrap() + text_start;
 
         // get the start-end of the english translation
-        let translation_start = text_positions[1]+7;
+        let translation_start = text_positions[1] + 7;
         // sometimes it panics. this is an easy way to make it work. i don't remember why.
         let try_translation_end = &string[translation_start..].find(",\"l");
 
         if let Some(x) = try_translation_end {
-            let translation_end = x+translation_start;
+            let translation_end = x + translation_start;
             // the sentence to return
             Sentence {
-                id: string[id_position+4..(string[id_position-2..].find(',').unwrap())].parse::<i32>().unwrap(),
-                text: parse_unicode(&string[text_start..text_end-1].to_string()),
+                id: string[id_position + 4..(string[id_position - 2..].find(',').unwrap())]
+                    .parse::<i32>()
+                    .unwrap(),
+                text: parse_unicode(&string[text_start..text_end - 1].to_string()),
                 translation: parse_unicode(&string[translation_start..translation_end].to_string()),
             }
-        }
-        else {
+        } else {
             // send a blank sentence back, this is a weird way to handle it
             // TODO: just return a Result
             blank()
@@ -305,7 +323,7 @@ fn parse_unicode(string: &str) -> String {
 
     while i < string.len() {
         if string.as_bytes()[i] as char == '\\' {
-            let number = &string[i+2..i+6];
+            let number = &string[i + 2..i + 6];
             let format = "\\".to_owned() + "u" + "{" + number + "}";
 
             let result = unescaper::unescape(format.as_str());
@@ -316,8 +334,7 @@ fn parse_unicode(string: &str) -> String {
                 chars.push(character);
             }
             i += 6;
-        }
-        else {
+        } else {
             chars.push(string.chars().nth(i).unwrap());
             i += 1;
         }
@@ -326,9 +343,20 @@ fn parse_unicode(string: &str) -> String {
 }
 
 fn blank() -> Sentence {
-    Sentence { id: -1, text: "".to_string(), translation: "".to_string() }
+    Sentence {
+        id: -1,
+        text: "".to_string(),
+        translation: "".to_string(),
+    }
 }
 
 fn get_char_locations(string: &str, query: char) -> Vec<usize> {
-    string.chars().enumerate().filter(|(_, c)| *c == query).map(|(i, _)| i).collect::<Vec<_>>()
+    // returns locations a char occurs in a given string. doesn't really need to be a function as i
+    // only use it once
+    string
+        .chars()
+        .enumerate()
+        .filter(|(_, c)| *c == query)
+        .map(|(i, _)| i)
+        .collect::<Vec<_>>()
 }
