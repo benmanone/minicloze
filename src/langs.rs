@@ -421,5 +421,5 @@ pub fn propagate() -> HashMap<&'static str, &'static str> {
                   ("malay", "zsm"),
                   ("zulu", "zul"),
                   ("zaza", "zza"),
-                  ]);
+                  ])
 }
