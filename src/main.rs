@@ -31,7 +31,7 @@ fn main() {
     // if arguments are passed
     let language_input = if args.len() > 1 {
         // the input from the command line
-        (&args[1]).to_string()
+        (args[1]).to_string()
     }
     // if compiled script is run
     else {
@@ -171,24 +171,23 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
                 .chars()
                 .map(|x| x.to_string())
                 .collect::<Vec<String>>()
-                .iter()
-                .nth(index)
+                .get(index)
                 .unwrap()
                 .to_string();
         } else {
             // get "words"
-            let split_whitespace = cropped.split(" ");
+            let split_whitespace = cropped.split(' ');
             // convert the split to a string
             words = split_whitespace
                 .map(|x| x.to_string() + " ")
                 .collect::<String>();
             // how many words there are
-            let length = cropped.split(" ").collect::<Vec<_>>().len();
+            let length = cropped.split(' ').count();
             // index of the random word
             index = rng.gen_range(0..length);
             // get the random word. it's "raw" because punctuation hasn't been removed yet.
             raw_word = cropped
-                .split(" ")
+                .split(' ')
                 .collect::<Vec<_>>()
                 .into_iter()
                 .nth(index)
@@ -245,7 +244,7 @@ fn parse(results: &str) -> Vec<Sentence> {
     for _i in 1..10 {
         let sentence_and_remainder = raw
             .match_indices("},{")
-            .nth(0)
+            .next()
             .map(|(index, _)| raw.split_at(index));
 
         if let Some(s) = sentence_and_remainder {
@@ -277,7 +276,7 @@ struct Sentence {
 
 impl Sentence {
     // make a new sentence
-    fn new(string: &String) -> Sentence {
+    fn new(string: &str) -> Sentence {
         // where "text" shows up in the response. take a look at a tatoeba api response if you want
         // a better understanding
         let text_positions: Vec<usize> = string.match_indices("text").map(|(i, _)| i).collect();
@@ -292,7 +291,7 @@ impl Sentence {
 
         // get the start-end of the text
         let text_start = text_positions[0] + 7;
-        let text_end = &string[text_start..].find(",\"l").unwrap() + text_start;
+        let text_end = string[text_start..].find(",\"l").unwrap() + text_start;
 
         // get the start-end of the english translation
         let translation_start = text_positions[1] + 7;
@@ -306,8 +305,8 @@ impl Sentence {
                 id: string[id_position + 4..(string[id_position - 2..].find(',').unwrap())]
                     .parse::<i32>()
                     .unwrap(),
-                text: parse_unicode(&string[text_start..text_end - 1].to_string()),
-                translation: parse_unicode(&string[translation_start..translation_end].to_string()),
+                text: parse_unicode(&string[text_start..text_end - 1]),
+                translation: parse_unicode(&string[translation_start..translation_end]),
             }
         } else {
             // send a blank sentence back, this is a weird way to handle it
@@ -324,7 +323,7 @@ fn parse_unicode(string: &str) -> String {
 
     while i < string.len() {
         // " breaks unespace for some reason
-        if string.as_bytes()[i] as char == '\\' && string.as_bytes()[i+1] != '"' as u8 {
+        if string.as_bytes()[i] as char == '\\' && string.as_bytes()[i+1] != b'"' {
             let number = &string[i + 2..i + 6];
             let format = "\\".to_owned() + "u" + "{" + number + "}";
 
