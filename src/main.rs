@@ -130,8 +130,6 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
         // just the sentence's original text
         let translation = &sentence.get_translation().unwrap().text;
 
-        println!();
-
         let words: String;
 
         // checks if the current language is non-spaced
@@ -190,17 +188,20 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
 
         // print either side and in the middle the underscores
         println!(
-            "{} {} {}",
+            "{}{}{}",
             halved.next().unwrap(),
             underscores,
             halved.last().unwrap()
         );
 
         // the english translation
-        println!("\n{}", sentence.text);
+        println!("{}", sentence.text);
 
         // user input
         let mut guess = String::new();
+
+        print!("> ");
+        io::stdout().flush().unwrap();
 
         io::stdin().read_line(&mut guess).unwrap();
 
