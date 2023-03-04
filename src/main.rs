@@ -275,7 +275,7 @@ fn pause() {
     let mut stdout = io::stdout();
 
     // print without a newline and flush manually.
-    write!(stdout, "Press any key to continue...").unwrap();
+    write!(stdout, "Press any key to exit").unwrap();
     stdout.flush().unwrap();
 
     // read a single byte and discard
