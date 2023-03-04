@@ -18,6 +18,8 @@ use serde::{Deserialize, Serialize};
 mod langs;
 
 fn main() {
+    clear_screen();
+
     // arguments for if you are building locally
     let args: Vec<_> = env::args().collect();
 
@@ -69,8 +71,7 @@ fn main() {
         elapsed, len
     );
 
-    // clear the screen and position cursor at the top left
-    print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+    clear_screen();
 
     start_game(sentences, len, language);
 }
@@ -259,4 +260,9 @@ fn convert_error(err: serde_json::Error) -> String {
         err.line(),
         err.column()
     )
+}
+
+fn clear_screen() {
+    // clear the screen and position cursor at the top left
+    print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 }
