@@ -1,6 +1,6 @@
 // input / output
 use std::io;
-use std::io::Write;
+use std::io::{Read, Write};
 
 // arguments from the command line
 use std::env;
@@ -214,6 +214,8 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
         }
     }
     println!("{}/{} sentences correct", correct, len);
+
+    pause();
 }
 // parse plaintext JSON response string into a vec of sentences results: the JSON
 fn parse(results: &str) -> Result<Vec<Sentence>, String> {
@@ -266,4 +268,16 @@ fn convert_error(err: serde_json::Error) -> String {
 fn clear_screen() {
     // clear the screen and position cursor at the top left
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+}
+
+fn pause() {
+    let mut stdin = io::stdin();
+    let mut stdout = io::stdout();
+
+    // print without a newline and flush manually.
+    write!(stdout, "Press any key to continue...").unwrap();
+    stdout.flush().unwrap();
+
+    // read a single byte and discard
+    let _ = stdin.read(&mut [0u8]).unwrap();
 }
