@@ -115,7 +115,6 @@ fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, minr
     Ok(sentences)
 }
 
-// where the actual "game" happens
 // sentences: sentences for the game
 // len: how many sentences there are. almost always 9
 // language: what language the game is in
@@ -188,14 +187,15 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
 
         // print either side and in the middle the underscores
         println!(
-            "{}{}{}",
+            "{}: {}{}{}",
+            language.to_uppercase(),
             halved.next().unwrap(),
             underscores,
             halved.last().unwrap()
         );
 
         // the english translation
-        println!("{}", sentence.text);
+        println!("ENG: {}", sentence.text);
 
         // user input
         let mut guess = String::new();
@@ -256,6 +256,7 @@ impl Sentence {
     }
 }
 
+// converts a serde error into a string
 fn convert_error(err: serde_json::Error) -> String {
     format!(
         "{:#?} error thrown by serde at {}:{}.",
@@ -270,6 +271,7 @@ fn clear_screen() {
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 }
 
+// wait for keystroke before quitting
 fn pause() {
     let mut stdin = io::stdin();
     let mut stdout = io::stdout();
