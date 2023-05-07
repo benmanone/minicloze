@@ -1,20 +1,10 @@
-// input / output
 use std::io;
 use std::io::{Read, Write};
-
-// arguments from the command line
 use std::env;
-
-// timer
 use std::time::Instant;
-
-// rng
 use rand::Rng;
-
-// deserialising JSON
 use serde::{Deserialize, Serialize};
-
-// where the language names : codes are kept.
+// where the language name codes are kept.
 mod langs;
 
 fn main() {
@@ -39,7 +29,6 @@ fn main() {
 
         // allows multiple outputs on the same line
         io::stdout().flush().unwrap();
-        // user input
         io::stdin().read_line(&mut input).unwrap();
 
         input = input.trim_start().trim_end().to_string();
@@ -61,7 +50,6 @@ fn main() {
         .expect("Please enter a valid language")
         .to_string();
 
-    // gets sentences for the correct language
     let sentences = generate_sentences(&language).unwrap();
     let len = sentences.len();
     let elapsed = now.elapsed();
@@ -76,24 +64,17 @@ fn main() {
     start_game(sentences, len, language);
 }
 
-// https requests tatoeba
 // language: the language to request from tatoeba
 fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
-    // the request string we send to tatoeba
     let request = format!("https://tatoeba.org/en/api_v0/search?from=eng&orphans=no&sort=random&to={language}&unapproved=no");
-
-    // the json response string we get back from tatoeba
     let response = minreq::get(request).send()?;
 
-    // format it
     let rep_string = response.as_str()?;
 
-    // extract a Vec of sentences from plaintext
     let sentences = parse(rep_string).unwrap();
     Ok(sentences)
 }
 
-// actually requests from tatoeba and formats it (basically just runs other functions)
 // language: the language to request from tatoeba
 fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, minreq::Error> {
     // where the initial request happens
@@ -116,12 +97,10 @@ fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, minr
 }
 
 // sentences: sentences for the game
-// len: how many sentences there are. almost always 9
+// len: how many sentences there are. almost always 10
 // language: what language the game is in
 fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
-    // for a correct count at the end
     let mut correct = 0;
-    // languages which don't use spaces. require some different logic
     let non_spaced = [
         "cmn", "lzh", "hak", "cjy", "nan", "hsn", "gan", "jpn", "tha", "khm", "lao", "mya",
     ];
@@ -131,73 +110,56 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
 
         let words: String;
 
-        // checks if the current language is non-spaced
         let is_non_spaced = non_spaced.iter().any(|x| x == &language);
 
-        // gets a new seed for random number generation
         let mut rng = rand::thread_rng();
         let raw_word: String;
-        let index: usize;
+        let gap_index: usize;
 
         if is_non_spaced {
-            // get chars and convert them to strings
-            let chars = translation.chars().map(|x| x.to_string());
-            // convert the map to a string
-            words = chars.collect::<String>();
-            // index of the random word
-            index = rng.gen_range(0..translation.chars().count());
-            // get the random word. it's "raw" because punctuation hasn't been removed yet.
+            let char_strings = translation.chars().map(|x| x.to_string());
+            words = char_strings.collect::<String>();
+            gap_index = rng.gen_range(0..translation.chars().count());
             raw_word = translation
                 .chars()
                 .map(|x| x.to_string())
                 .collect::<Vec<_>>()
-                .get(index)
+                .get(gap_index)
                 .unwrap()
                 .to_string();
         } else {
-            // get "words"
             let split_whitespace = translation.split(' ');
-            // convert the split to a string
             words = split_whitespace
                 .map(|x| x.to_string() + " ")
                 .collect::<String>();
-            // how many words there are
             let length = translation.split(' ').count();
-            // index of the random word
-            index = rng.gen_range(0..length);
-            // get the random word. it's "raw" because punctuation hasn't been removed yet.
+            gap_index = rng.gen_range(0..length);
             raw_word = translation
                 .split(' ')
                 .collect::<Vec<_>>()
-                .get(index)
+                .get(gap_index)
                 .unwrap()
                 .to_string();
         }
 
-        // remove punctuation
         let word = raw_word.replace(&['(', ')', ',', '.', ';', ':'][..], "");
 
-        // how many underscores to print
-        let underscores = vec!['_'; word.chars().count()]
+        let underscores_num = vec!['_'; word.chars().count()]
             .into_iter()
             .collect::<String>();
 
-        // split the sentence along the random word
         let mut halved = words.split(&word).collect::<Vec<&str>>().into_iter();
 
-        // print either side and in the middle the underscores
         println!(
             "{}: {}{}{}",
             language.to_uppercase(),
             halved.next().unwrap(),
-            underscores,
+            underscores_num,
             halved.last().unwrap()
         );
 
-        // the english translation
         println!("ENG: {}", sentence.text);
 
-        // user input
         let mut guess = String::new();
 
         print!("> ");
@@ -205,7 +167,6 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
 
         io::stdin().read_line(&mut guess).unwrap();
 
-        // if they're equal
         if guess.trim().to_lowercase().contains(&word.to_lowercase()) {
             correct += 1;
             println!("Correct.\n");
@@ -217,7 +178,7 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
 
     pause();
 }
-// parse plaintext JSON response string into a vec of sentences results: the JSON
+// parse plaintext JSON response string into a Vec of Sentences results: the JSON
 fn parse(results: &str) -> Result<Vec<Sentence>, String> {
     let sentences: Json = serde_json::from_str(results).map_err(convert_error)?;
     Ok(sentences.results)
@@ -266,8 +227,8 @@ fn convert_error(err: serde_json::Error) -> String {
     )
 }
 
+// clear the screen and position cursor at the top left
 fn clear_screen() {
-    // clear the screen and position cursor at the top left
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 }
 
