@@ -1,9 +1,9 @@
-use std::io;
-use std::io::{Read, Write};
-use std::env;
-use std::time::Instant;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
+use std::env;
+use std::io;
+use std::io::{Read, Write};
+use std::time::Instant;
 // where the language name codes are kept.
 mod langs;
 
