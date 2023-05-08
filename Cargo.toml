@@ -1,8 +1,11 @@
 [package]
 name = "minicloze"
 description = "A command-line language-learning game"
+repository = "https://github.com/benmanone/minicloze/"
+readme = "https://github.com/benmanone/minicloze/blob/master/README.md"
+authors = ["benman"]
 license = "WTFPL"
-version = "0.1.0"
+version = "1.1.0"
 edition = "2021"
 
 [dependencies]
