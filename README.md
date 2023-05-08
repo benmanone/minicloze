@@ -3,9 +3,9 @@ A command-line language learning game using Tatoeba's great database. Accelerate
 
 # Features
 - Support for over 400 languages
-- Lean implementation
-- Written in pure Rust
+- Lookup unfamiliar words on Wiktionary
 - Support for MacOS, Linux and Windows
+- Lean implementation, written in pure Rust
 
 # Targets
 - **Long-term**
