@@ -136,7 +136,7 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
                 .to_string();
         }
 
-        let word = raw_word.replace(&['(', ')', ',', '.', ';', ':'][..], "");
+        let word = raw_word.replace(&['(', ')', ',', '.', ';', ':', '?'][..], "");
 
         let underscores_num = vec!['_'; word.chars().count()]
             .into_iter()
