@@ -9,3 +9,4 @@ serde_json = "1"
 minreq = { version="2.6.0", features=["https"] }
 rand = "0.8.5"
 ring = "0.16.20"
+open = "4.1.0"

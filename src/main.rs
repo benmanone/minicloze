@@ -10,13 +10,11 @@ mod langs;
 fn main() {
     clear_screen();
 
-    // arguments for if you are building locally
     let args: Vec<_> = env::args().collect();
 
     // gets the tatoeba language codes from a seperate file
     let lang_codes = langs::propagate();
 
-    // if arguments are passed
     let language_input = if args.len() > 1 {
         // the input from the command line
         (args[1]).to_string()
@@ -27,9 +25,7 @@ fn main() {
 
         print!("What language do you want to study? ");
 
-        // allows multiple outputs on the same line
-        io::stdout().flush().unwrap();
-        io::stdin().read_line(&mut input).unwrap();
+        read_into(&mut input);
 
         input = input.trim_start().trim_end().to_string();
         input
@@ -37,12 +33,11 @@ fn main() {
     print!("Fetching sentences for you...");
     io::stdout().flush().unwrap();
 
-    // to display how long fetching sentences takes
     let now = Instant::now();
 
+    print!("debug");
     let language_request = language_input.to_lowercase();
 
-    // get the correct code for the input language
     // TODO: autocorrect obvious mistakes (e.g. frnech vs french) and "mistakes" (e.g. mandarin vs
     // mandarin chinese)
     let language = lang_codes
@@ -58,8 +53,6 @@ fn main() {
         " Processing complete in {:.2?}, {} sentences parsed.",
         elapsed, len
     );
-
-    clear_screen();
 
     start_game(sentences, len, language);
 }
@@ -100,6 +93,7 @@ fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, minr
 // len: how many sentences there are. almost always 10
 // language: what language the game is in
 fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
+    clear_screen();
     let mut correct = 0;
     let non_spaced = [
         "cmn", "lzh", "hak", "cjy", "nan", "hsn", "gan", "jpn", "tha", "khm", "lao", "mya",
@@ -163,25 +157,97 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
         let mut guess = String::new();
 
         print!("> ");
-        io::stdout().flush().unwrap();
-
-        io::stdin().read_line(&mut guess).unwrap();
+        read_into(&mut guess);
 
         if guess.trim().to_lowercase().contains(&word.to_lowercase()) {
             correct += 1;
-            println!("Correct.\n");
+            println!("Correct.");
         } else {
-            println!("Wrong, {}.\n", word);
+            println!("Wrong, {}.", word);
         }
-    }
-    println!("{}/{} sentences correct", correct, len);
+        println!();
 
-    pause();
+        loop {
+            let mut lookup = String::new();
+            println!("Lookup a word? [enter word or ignore]");
+            print!("> ");
+            read_into(&mut lookup);
+
+            if lookup.trim().is_empty() {
+                break
+            }
+            else {
+                let lang_codes = langs::propagate();
+                let mut full_language: String = "a".to_string();
+                // gets key from value
+                for pair in lang_codes {
+                    if pair.1 == language {
+                        full_language = pair.0.to_string();
+                    }
+                }
+                let titlecase_language = format!("{}{}", (&full_language[..1].to_string()).to_uppercase(), &full_language[1..]);
+
+                open::that(["https://en.wiktionary.org/wiki/", &lookup.trim(), "#", titlecase_language.as_str()].join("")).unwrap();
+            }
+        }
+
+        println!("\n");
+    }
+    println!("{}/{} sentences correct. Play again? [y/n]", correct, len);
+    print!("> ");
+
+    let mut replay = String::new();
+    
+    read_into(&mut replay);
+
+    if replay.trim().to_lowercase().contains('y') {
+        let sentences = generate_sentences(language.as_str()).unwrap();
+        let len = sentences.len();
+        start_game(sentences, len, language);
+    }
+    else {
+        pause();
+    }
 }
+
 // parse plaintext JSON response string into a Vec of Sentences results: the JSON
 fn parse(results: &str) -> Result<Vec<Sentence>, String> {
     let sentences: Json = serde_json::from_str(results).map_err(convert_error)?;
     Ok(sentences.results)
+}
+
+// converts a serde error into a string
+fn convert_error(err: serde_json::Error) -> String {
+    format!(
+        "{:#?} error thrown by serde at {}:{}.",
+        err.classify(),
+        err.line(),
+        err.column()
+    )
+}
+
+// clear the screen and position cursor at the top left
+fn clear_screen() {
+    print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+}
+
+// wait for keystroke before quitting
+fn pause() {
+    let mut stdin = io::stdin();
+    let mut stdout = io::stdout();
+
+    // print without a newline and flush manually.
+    write!(stdout, "Press any key to exit").unwrap();
+    stdout.flush().unwrap();
+
+    // read a single byte and discard
+    let _ = stdin.read(&mut [0u8]).unwrap();
+}
+
+// user input
+fn read_into(buffer: &mut String) {
+    io::stdout().flush().unwrap();
+    io::stdin().read_line(buffer).unwrap();
 }
 
 // represents the entire JSON response. results is the sentences found.
@@ -215,32 +281,4 @@ impl Sentence {
             self.translations.get(1).unwrap().get(0)
         }
     }
-}
-
-// converts a serde error into a string
-fn convert_error(err: serde_json::Error) -> String {
-    format!(
-        "{:#?} error thrown by serde at {}:{}.",
-        err.classify(),
-        err.line(),
-        err.column()
-    )
-}
-
-// clear the screen and position cursor at the top left
-fn clear_screen() {
-    print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
-}
-
-// wait for keystroke before quitting
-fn pause() {
-    let mut stdin = io::stdin();
-    let mut stdout = io::stdout();
-
-    // print without a newline and flush manually.
-    write!(stdout, "Press any key to exit").unwrap();
-    stdout.flush().unwrap();
-
-    // read a single byte and discard
-    let _ = stdin.read(&mut [0u8]).unwrap();
 }
