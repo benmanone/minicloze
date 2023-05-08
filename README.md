@@ -16,6 +16,9 @@ A command-line language learning game using Tatoeba's great database. Accelerate
 - Optional persistency between rounds
 - Play between two non-English languages
 
+# Installation
+`cargo install minicloze` or just download a release.
+
 # Usage
 Just pass in the language (from www.tatoeba.org) you want to use into the prompt. If you're building locally you can pass it into `cargo run`.
 
