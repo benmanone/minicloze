@@ -12,7 +12,6 @@ A command-line language learning game using Tatoeba's great database. Accelerate
 - Build a FOSS version of Clozemaster
 - More gamemodes
 - **Short-term**
-- Get definition of a word from Wiktionary
 - More user-friendly design
 - Optional persistency between rounds
 - Play between two non-English languages
