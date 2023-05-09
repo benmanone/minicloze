@@ -174,9 +174,8 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
             read_into(&mut lookup);
 
             if lookup.trim().is_empty() {
-                break
-            }
-            else {
+                break;
+            } else {
                 let lang_codes = langs::propagate();
                 let mut full_language: String = "a".to_string();
                 // gets key from value
@@ -185,9 +184,22 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
                         full_language = pair.0.to_string();
                     }
                 }
-                let titlecase_language = format!("{}{}", (&full_language[..1].to_string()).to_uppercase(), &full_language[1..]);
+                let titlecase_language = format!(
+                    "{}{}",
+                    full_language[..1].to_uppercase(),
+                    &full_language[1..]
+                );
 
-                open::that(["https://en.wiktionary.org/wiki/", &lookup.trim(), "#", titlecase_language.as_str()].join("")).unwrap();
+                open::that(
+                    [
+                        "https://en.wiktionary.org/wiki/",
+                        lookup.trim(),
+                        "#",
+                        titlecase_language.as_str(),
+                    ]
+                    .join(""),
+                )
+                .unwrap();
             }
         }
 
@@ -197,15 +209,14 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
     print!("> ");
 
     let mut replay = String::new();
-    
+
     read_into(&mut replay);
 
     if replay.trim().to_lowercase().contains('y') {
         let sentences = generate_sentences(language.as_str()).unwrap();
         let len = sentences.len();
         start_game(sentences, len, language);
-    }
-    else {
+    } else {
         pause();
     }
 }
