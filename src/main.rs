@@ -122,30 +122,34 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
                 .unwrap()
                 .to_string();
         } else {
-            let split_whitespace = translation.split(' ');
-            words = split_whitespace
-                .map(|x| x.to_string() + " ")
-                .collect::<String>();
-            let length = translation.split(' ').count();
+            words = translation.split_inclusive(' ').collect::<String>();
+            let length = translation.split_inclusive(' ').count();
             gap_index = rng.gen_range(0..length);
             raw_word = translation
-                .split(' ')
+                .split_inclusive(' ')
                 .collect::<Vec<_>>()
                 .get(gap_index)
                 .unwrap()
                 .to_string();
         }
 
-        let word = raw_word.replace(&['(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '\'', '«', '»'][..], "");
+        let word = raw_word.replace(
+            &[
+                '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '\'', '«', '»',
+            ][..],
+            "",
+        );
 
-        let underscores_num = vec!['_'; word.chars().count()]
+        let stripped_word = word.replace(' ', "");
+
+        let underscores_num = vec!['_'; stripped_word.chars().count()]
             .into_iter()
             .collect::<String>();
 
         let mut halved = words.split(&word).collect::<Vec<&str>>().into_iter();
 
         println!(
-            "{}: {}{}{}",
+            "{}: {} {} {}",
             language.to_uppercase(),
             halved.next().unwrap(),
             underscores_num,
@@ -159,11 +163,15 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
         print!("> ");
         read_into(&mut guess);
 
-        if guess.trim().to_lowercase().contains(&word.to_lowercase()) {
+        if guess
+            .trim()
+            .to_lowercase()
+            .contains(&stripped_word.to_lowercase())
+        {
             correct += 1;
             println!("Correct.");
         } else {
-            println!("Wrong, {}.", word);
+            println!("Wrong, {}.", stripped_word);
         }
         println!();
 
