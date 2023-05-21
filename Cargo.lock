@@ -88,7 +88,7 @@ dependencies = [
 
 [[package]]
 name = "minicloze"
-version = "1.2.0"
+version = "1.2.2"
 dependencies = [
  "minreq",
  "open",

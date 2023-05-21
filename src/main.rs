@@ -133,8 +133,6 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
                 .to_string();
         }
 
-        println!(" {} ", raw_word);
-
         let word = raw_word.replace(
             &[
                 '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '\'', '«', '»',
