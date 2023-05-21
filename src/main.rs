@@ -133,6 +133,8 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
                 .to_string();
         }
 
+        println!(" {} ", raw_word);
+
         let word = raw_word.replace(
             &[
                 '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '\'', '«', '»',
@@ -153,7 +155,7 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
             language.to_uppercase(),
             halved.next().unwrap(),
             underscores_num,
-            halved.last().unwrap()
+            halved.last().unwrap_or_default()
         );
 
         println!("ENG: {}", sentence.text);
