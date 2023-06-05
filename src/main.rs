@@ -1,4 +1,5 @@
 use rand::Rng;
+use levenshtein::levenshtein;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::io;
@@ -6,6 +7,8 @@ use std::io::{Read, Write};
 use std::time::Instant;
 // where the language name codes are kept.
 mod langs;
+
+const DISTANCE_FOR_CLOSE: i32 = 3;
 
 fn main() {
     clear_screen();
@@ -54,7 +57,7 @@ fn main() {
         elapsed, len
     );
 
-    start_game(sentences, len, language);
+    start_game(sentences, len, language, 0, 0);
 }
 
 // language: the language to request from tatoeba
@@ -92,7 +95,9 @@ fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, minr
 // sentences: sentences for the game
 // len: how many sentences there are. almost always 10
 // language: what language the game is in
-fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
+// previous_correct: the total previous correct score
+// total: the previous total
+fn start_game(sentences: Vec<Sentence>, len: usize, language: String, previous_correct: i32, total: i32) {
     clear_screen();
     let mut correct = 0;
     let non_spaced = [
@@ -163,13 +168,13 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
         print!("> ");
         read_into(&mut guess);
 
-        if guess
-            .trim()
-            .to_lowercase()
-            .contains(&stripped_word.to_lowercase())
-        {
+        let levenshtein_distance = levenshtein(&guess.trim().to_lowercase(), &stripped_word.to_lowercase());
+
+        if levenshtein_distance == 0 {
             correct += 1;
             println!("Correct.");
+        } else if levenshtein_distance < DISTANCE_FOR_CLOSE as usize {
+            println!("Close, {}.", stripped_word);
         } else {
             println!("Wrong, {}.", stripped_word);
         }
@@ -213,7 +218,16 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
 
         println!("\n");
     }
-    println!("{}/{} sentences correct. Play again? [y/n]", correct, len);
+
+    let new_correct = previous_correct + correct;
+    let new_total = total + len as i32;
+
+    if (new_total) / len as i32 == 1 {
+        println!("{}/{} sentences correct. Play again? [y/n]", correct, len);
+    }
+    else {
+        println!("{}/{} sentences correct locally, {}/{} sentences correct overall. Play again? [y/n]", correct, len, new_correct, new_total);
+    }
     print!("> ");
 
     let mut replay = String::new();
@@ -223,7 +237,7 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String) {
     if replay.trim().to_lowercase().contains('y') {
         let sentences = generate_sentences(language.as_str()).unwrap();
         let len = sentences.len();
-        start_game(sentences, len, language);
+        start_game(sentences, len, language, new_correct, new_total);
     } else {
         pause();
     }
