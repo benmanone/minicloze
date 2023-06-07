@@ -31,6 +31,8 @@ www.crates.io/crates/rand
 
 www.crates.io/crates/open
 
+www.crates.io/crates/levenshtein
+
 # Contributing
 Any help is very welcome, just open a PR or an issue and I'll probably be able to reply quickly. Right now the focus is on expanding from the basic idea into a more fully-fledged and user friendly experience.
 

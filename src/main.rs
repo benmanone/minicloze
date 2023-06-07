@@ -116,7 +116,7 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String, previous_c
         let gap_index: usize;
 
         if is_non_spaced {
-            let char_strings = translation.chars().map(|x| x.to_string());
+            let char_strings = translation.trim().chars().map(|x| x.to_string());
             words = char_strings.collect::<String>();
             gap_index = rng.gen_range(0..translation.chars().count());
             raw_word = translation
@@ -127,8 +127,8 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String, previous_c
                 .unwrap()
                 .to_string();
         } else {
-            words = translation.split_inclusive(' ').collect::<String>();
-            let length = translation.split_inclusive(' ').count();
+            words = translation.trim().split_inclusive(' ').collect::<String>();
+            let length = translation.trim().split_inclusive(' ').count();
             gap_index = rng.gen_range(0..length);
             raw_word = translation
                 .split_inclusive(' ')
@@ -138,9 +138,11 @@ fn start_game(sentences: Vec<Sentence>, len: usize, language: String, previous_c
                 .to_string();
         }
 
+        println!();
+
         let word = raw_word.replace(
             &[
-                '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '\'', '«', '»',
+                '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»',
             ][..],
             "",
         );
