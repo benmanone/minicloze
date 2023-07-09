@@ -1,5 +1,5 @@
 # minicloze
-A command-line language learning game using Tatoeba's great database. Accelerate your studies by putting your knowledge to the test in an addictive yet minimalist game.
+A command-line cloze-based language-learning game using the Tatoeba database of sentences. Written in Rust. The name is a reference to the Clozemaster app.
 
 # Features
 - Support for over 400 languages
@@ -20,7 +20,7 @@ A command-line language learning game using Tatoeba's great database. Accelerate
 `cargo install minicloze` or just download a release.
 
 # Usage
-Just pass in the language (from www.tatoeba.org) you want to use into the prompt. If you're building locally you can pass it into `cargo run`.
+Just pass in the language (from www.tatoeba.org) you want to use, e.g. `minicloze french`. If you're building locally you can pass it into `cargo run`.
 
 # Dependencies
 www.crates.io/crates/minreq
@@ -36,5 +36,5 @@ www.crates.io/crates/levenshtein
 # Contributing
 Any help is very welcome, just open a PR or an issue and I'll probably be able to reply quickly. Right now the focus is on expanding from the basic idea into a more fully-fledged and user friendly experience.
 
-# Tatoeba
+# Tatoeba Licensing
 All sentences are from Tatoeba (www.tatoeba.org). Tatoeba's data is released under the CC-BY 2.0 FR license.
