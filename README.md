@@ -1,5 +1,5 @@
 # minicloze
-A command-line cloze-based language-learning game using the Tatoeba database of sentences. Written in Rust. The name is a reference to the Clozemaster app.
+A command-line cloze-based language-learning game using the Tatoeba database of sentences. Written in Rust. The name is a reference to the Clozemaster app. This repository contains the Cargo workspace for minicloze.
 
 # Features
 - Support for over 400 languages
@@ -10,10 +10,8 @@ A command-line cloze-based language-learning game using the Tatoeba database of 
 # Targets
 - **Long-term**
 - Build a FOSS version of Clozemaster
-- More gamemodes
 - **Short-term**
-- More user-friendly design
-- Optional persistency between rounds
+- Build an Iced-based GUI frontend alongside the current CLI frontend
 - Play between two non-English languages
 
 # Installation
