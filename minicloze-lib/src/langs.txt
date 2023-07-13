@@ -1,0 +1,420 @@
+eng	English	
+rus	Russian	
+ita	Italian	
+tur	Turkish	
+epo	Esperanto	
+kab	Kabyle	
+ber	Berber	
+deu	German	
+fra	French	
+por	Portuguese	
+spa	Spanish	
+hun	Hungarian	
+jpn	Japanese	
+heb	Hebrew	
+ukr	Ukrainian	
+nld	Dutch	
+fin	Finnish	
+pol	Polish	
+lit	Lithuanian	
+mkd	Macedonian	
+mar	Marathi	
+cmn	Mandarin Chinese	
+ces	Czech	
+dan	Danish	
+tok	Toki Pona	
+swe	Swedish	
+srp	Serbian	
+lat	Latin	
+ara	Arabic	
+ell	Greek	
+tgl	Tagalog	
+ron	Romanian	
+ina	Interlingua	
+pes	Persian	
+bul	Bulgarian	
+tlh	Klingon	
+swc	Congo Swahili	
+vie	Vietnamese	
+lfn	Lingua Franca Nova	
+hau	Hausa	
+ind	Indonesian	
+nds	Low German (Low Saxon)	
+slk	Slovak	
+nob	Norwegian Bokmål	
+jbo	Lojban	
+hin	Hindi	
+tat	Tatar	
+nnb	Nande	
+isl	Icelandic	
+yid	Yiddish	
+bel	Belarusian	
+ckb	Central Kurdish (Soranî)	
+kor	Korean	
+ido	Ido	
+kmr	Northern Kurdish (Kurmancî)	
+ben	Bengali	
+cat	Catalan	
+uig	Uyghur	
+ile	Interlingue	
+bre	Breton	
+zsm	Malay	
+oss	Ossetian	
+tuk	Turkmen	
+yue	Cantonese	
+eus	Basque	
+kat	Georgian	
+oci	Occitan	
+gos	Gronings	
+est	Estonian	
+aze	Azerbaijani	
+hrv	Croatian	
+tha	Thai	
+kzj	Coastal Kadazan	
+run	Kirundi	
+sat	Santali	
+hye	Armenian	
+vol	Volapük	
+lin	Lingala	
+wuu	Shanghainese	
+glg	Galician	
+swh	Swahili	
+mhr	Meadow Mari	
+afr	Afrikaans	
+kaz	Kazakh	
+avk	Kotava	
+lvs	Latvian	
+cor	Cornish	
+tig	Tigre	
+rhg	Rohingya	
+knc	Central Kanuri	
+asm	Assamese	
+grn	Guarani	
+zgh	Standard Moroccan Tamazight	
+dtp	Central Dusun	
+gle	Irish	
+frr	North Frisian	
+shi	Tashelhit	
+mon	Mongolian	
+cbk	Chavacano	
+sqi	Albanian	
+ilo	Ilocano	
+war	Waray	
+arq	Algerian Arabic	
+urd	Urdu	
+kha	Khasi	
+ota	Ottoman Turkish	
+khm	Khmer	
+nus	Nuer	
+gcf	Guadeloupean Creole French	
+zlm	Malay (Vernacular)	
+swg	Swabian	
+lzh	Literary Chinese	
+lij	Ligurian	
+zza	Zaza	
+ceb	Cebuano	
+bos	Bosnian	
+cym	Welsh	
+chv	Chuvash	
+nno	Norwegian Nynorsk	
+lad	Ladino	
+hsb	Upper Sorbian	
+pam	Kapampangan	
+unknown	unknown	
+hoc	Ho	
+pcd	Picard	
+orv	Old East Slavic	
+hrx	Hunsrik	
+slv	Slovenian	
+grc	Ancient Greek	
+arz	Egyptian Arabic	
+dsb	Lower Sorbian	
+gla	Scottish Gaelic	
+jav	Javanese	
+sdh	Southern Kurdish	
+prg	Old Prussian	
+uzb	Uzbek	
+sah	Yakut	
+csb	Kashubian	
+guc	Wayuu	
+bua	Buryat	
+ltz	Luxembourgish	
+mal	Malayalam	
+rom	Romani	
+xmf	Mingrelian	
+xal	Kalmyk	
+pms	Piedmontese	
+nst	Naga (Tangshang)	
+fry	Frisian	
+mus	Muskogee (Creek)	
+thv	Tahaggart Tamahaq	
+tpw	Old Tupi	
+mya	Burmese	
+ckt	Chukchi	
+fkv	Kven Finnish	
+tam	Tamil	
+gsw	Swiss German	
+nov	Novial	
+max	North Moluccan Malay	
+que	Quechua	
+fao	Faroese	
+ori	Odia (Oriya)	
+mri	Maori	
+ang	Old English	
+kir	Kyrgyz	
+tzl	Talossan	
+cha	Chamorro	
+crh	Crimean Tatar	
+mfa	Kelantan-Pattani Malay	
+bzt	Brithenig	
+ain	Ainu	
+ast	Asturian	
+tel	Telugu	
+got	Gothic	
+xho	Xhosa	
+amh	Amharic	
+awa	Awadhi	
+mlt	Maltese	
+bak	Bashkir	
+shy	Tachawit	
+rif	Tarifit	
+bar	Bavarian	
+krc	Karachay-Balkar	
+lao	Lao	
+tmr	Jewish Babylonian Aramaic	
+fro	Old French	
+nah	Nahuatl	
+sme	Northern Sami	
+pan	Punjabi (Eastern)	
+kan	Kannada	
+srn	Sranan Tongo	
+krl	Karelian	
+vec	Venetian	
+haw	Hawaiian	
+sux	Sumerian	
+npi	Nepali	
+guj	Gujarati	
+nog	Nogai	
+san	Sanskrit	
+qya	Quenya	
+bjn	Banjar	
+egl	Emilian	
+ldn	Láadan	
+enm	Middle English	
+bal	Baluchi	
+hbo	Ancient Hebrew	
+afb	Gulf Arabic	
+som	Somali	
+skr	Saraiki	
+cho	Choctaw	
+wol	Wolof	
+kum	Kumyk	
+min	Minangkabau	
+kal	Greenlandic	
+lzz	Laz	
+rue	Rusyn	
+evn	Evenki	
+zul	Zulu	
+mik	Hitchiti	
+tir	Tigrinya	
+tet	Tetun	
+arg	Aragonese	
+apc	North Levantine Arabic	
+kbd	Kabardian	
+stq	Saterland Frisian	
+hat	Haitian Creole	
+shs	Shuswap	
+tpi	Tok Pisin	
+sjn	Sindarin	
+ltg	Latgalian	
+pap	Papiamento	
+sco	Scots	
+nav	Navajo	
+lld	Ladin	
+cmo	Central Mnong	
+smo	Samoan	
+mrj	Hill Mari	
+ksh	Kölsch	
+mww	Hmong Daw (White)	
+afh	Afrihili	
+tyv	Tuvinian	
+bvy	Baybayanon	
+iba	Iban	
+moh	Mohawk	
+udm	Udmurt	
+ary	Moroccan Arabic	
+myv	Erzya	
+crs	Seychellois Creole	
+tly	Talysh	
+ext	Extremaduran	
+tgk	Tajik	
+mlg	Malagasy	
+iii	Nuosu	
+mgm	Mambae	
+yor	Yoruba	
+pus	Pashto	
+ppl	Pipil	
+lut	Lushootseed	
+sma	Southern Sami	
+bod	Tibetan	
+dws	Dutton World Speedwords	
+pdc	Pennsylvania German	
+bfz	Mahasu Pahari	
+pag	Pangasinan	
+bho	Bhojpuri	
+tts	Isan	
+hak	Hakka Chinese	
+wln	Walloon	
+chn	Chinook Jargon	
+sin	Sinhala	
+bom	Berom	
+ike	Inuktitut	
+acm	Iraqi Arabic	
+kas	Kashmiri	
+sgs	Samogitian	
+kpv	Komi-Zyrian	
+lim	Limburgish	
+sna	Shona	
+hil	Hiligaynon	
+koi	Komi-Permyak	
+ngu	Guerrero Nahuatl	
+fij	Fijian	
+kjh	Khakas	
+ryu	Okinawan	
+tsn	Setswana	
+che	Chechen	
+div	Dhivehi	
+drt	Drents	
+glv	Manx	
+nch	Central Huasteca Nahuatl	
+pnb	Punjabi (Western)	
+gag	Gagauz	
+cycl	CycL	
+gbm	Garhwali	
+oji	Ojibwe	
+ibo	Igbo	
+niu	Niuean	
+fuv	Nigerian Fulfulde	
+scn	Sicilian	
+pau	Palauan	
+hif	Fiji Hindi	
+liv	Livonian	
+jam	Jamaican Patois	
+fur	Friulian	
+rap	Rapa Nui	
+ady	Adyghe	
+frm	Middle French	
+igs	Interglossa	
+abk	Abkhaz	
+sun	Sundanese	
+kin	Kinyarwanda	
+dng	Dungan	
+cay	Cayuga	
+umb	Umbundu	
+chr	Cherokee	
+tah	Tahitian	
+lmo	Lombard	
+akl	Aklanon	
+aln	Gheg Albanian	
+bis	Bislama	
+ood	O'odham	
+mvv	Tagal Murut	
+mah	Marshallese	
+nya	Chinyanja	
+ewe	Ewe	
+lkt	Lakota	
+roh	Romansh	
+ton	Tongan	
+cos	Corsican	
+aoz	Uab Meto	
+kek	Kekchi (Q'eqchi')	
+ava	Avar	
+oar	Old Aramaic	
+mwl	Mirandese	
+lou	Louisiana Creole	
+izh	Ingrian	
+osp	Old Spanish	
+non	Old Norse	
+kaa	Karakalpak	
+klj	Khalaj	
+inh	Ingush	
+ngt	Ngeq 	
+dar	Dargwa	
+cjy	Jin Chinese	
+mic	Mi'kmaq	
+new	Newari	
+jpa	Jewish Palestinian Aramaic	
+srd	Sardinian	
+lez	Lezgi	
+phn	Phoenician	
+toi	Tonga (Zambezi)	
+vro	Võro	
+nan	Min Nan Chinese	
+tvl	Tuvaluan	
+gil	Gilbertese	
+nlv	Orizaba Nahuatl	
+qxq	Qashqai	
+ajp	South Levantine Arabic	
+lbe	Lak	
+bam	Bambara	
+ofs	Old Frisian	
+alt	Southern Altai	
+vep	Veps	
+emx	Erromintxela	
+xqa	Karakhanid	
+zea	Zeelandic	
+tkl	Tokelauan	
+abq	Abaza	
+brx	Bodo	
+nau	Nauruan	
+yua	Yucatec Maya	
+szl	Silesian	
+laa	Southern Subanen	
+kam	Kamba	
+mnw	Mon	
+jdt	Juhuri (Judeo-Tat)	
+mdf	Moksha	
+sag	Sango	
+chg	Chagatai	
+mad	Madurese	
+mai	Maithili	
+fuc	Pulaar	
+quc	K'iche'	
+cpi	Chinese Pidgin English	
+otk	Old Turkish	
+aii	Assyrian Neo-Aramaic	
+snd	Sindhi	
+kiu	Northern Zaza (Kirmanjki)	
+diq	Southern Zaza (Dimli)	
+ban	Balinese	
+mfe	Morisyen	
+bcl	Central Bikol	
+pal	Middle Persian (Pahlavi)	
+tmw	Temuan	
+hsn	Xiang Chinese	
+hnj	Hmong Njua (Green)	
+gom	Konkani (Goan)	
+crk	Plains Cree	
+kxi	Keningau Murut	
+tso	Tsonga	
+osx	Old Saxon	
+pfl	Palatine German	
+syc	Syriac	
+ayl	Libyan Arabic	
+mnr	Mono (USA)	
+mni	Meitei	
+gan	Gan Chinese	
+hdn	Northern Haida	
+gaa	Ga
+lug	Luganda	
+sot	Southern Sotho	
+aym	Aymara	
+nys	Nyungar	
+nap	Neapolitan	
+mnc	Manchu	
+pli	Pali	
+urh	Urhobo	
+rel	Rendille	
+hax	Southern Haida	
+ssw	Swazi	
+cyo	Cuyonon	

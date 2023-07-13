@@ -1,0 +1,16 @@
+[package]
+name = "minicloze-cli"
+description = "A CLI frontend for minicloze"
+repository = "https://github.com/benmanone/minicloze/"
+readme = "README.md"
+authors = ["benman"]
+license = "WTFPL"
+version = "1.3.1"
+edition = "2021"
+
+[dependencies]
+minicloze-lib = {path = "../minicloze-lib" }
+rand = "0.8.5"
+ring = "0.16.20"
+open = "4.1.0"
+levenshtein = "1.0.5"
