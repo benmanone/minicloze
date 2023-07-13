@@ -1,3 +1,7 @@
-/target
+Cargo.lock
+/minicloze-lib/Cargo.lock
+/minicloze-cli/Cargo.lock
 .DS_Store
-src/.DS_Store
+/minicloze-lib/.DS_Store
+/minicloze-cli/.DS_Store
+/target
