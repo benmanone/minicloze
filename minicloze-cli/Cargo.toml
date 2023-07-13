@@ -1,5 +1,5 @@
 [package]
-name = "minicloze-cli"
+name = "minicloze"
 description = "A CLI frontend for minicloze"
 repository = "https://github.com/benmanone/minicloze/"
 readme = "README.md"

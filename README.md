@@ -15,10 +15,10 @@ A command-line cloze-based language-learning game using the Tatoeba database of 
 - Play between two non-English languages
 
 # Installation
-`cargo install minicloze` or just download a release.
+`cargo install minicloze` (more likely to be up-to-date) or just download a release.
 
 # Usage
-Just pass in the language (from www.tatoeba.org) you want to use, e.g. `minicloze french`. If you're building locally you can pass it into `cargo run`.
+Just pass in the language (from www.tatoeba.org) you want to use, e.g. `minicloze french`.
 
 # Dependencies
 www.crates.io/crates/minreq
