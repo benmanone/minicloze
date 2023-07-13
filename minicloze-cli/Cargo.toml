@@ -9,7 +9,7 @@ version = "1.4.0"
 edition = "2021"
 
 [dependencies]
-minicloze-lib = {path = "../minicloze-lib" }
+minicloze-lib = "0.1.0"
 rand = "0.8.5"
 ring = "0.16.20"
 open = "4.1.0"
