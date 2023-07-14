@@ -18,17 +18,17 @@ pub mod wiktionary {
             "{}{}",
             full_language[..1].to_uppercase(),
             &full_language[1..]
-            );
+        );
 
         open::that(
             [
-            "https://en.wiktionary.org/wiki/",
-            lookup.trim(),
-            "#",
-            titlecase_language.as_str(),
+                "https://en.wiktionary.org/wiki/",
+                lookup.trim(),
+                "#",
+                titlecase_language.as_str(),
             ]
             .join(""),
-            )
-            .unwrap();
+        )
+        .unwrap();
     }
 }

@@ -1,4 +1,7 @@
-use minicloze_lib::{langs::propagate, sentence::generate_sentences, sentence::Sentence, wiktionary::wiktionary_try_open};
+use minicloze_lib::{
+    langs::propagate, sentence::generate_sentences, sentence::Sentence,
+    wiktionary::wiktionary_try_open,
+};
 
 use levenshtein::levenshtein;
 
