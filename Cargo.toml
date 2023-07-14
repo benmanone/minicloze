@@ -2,5 +2,6 @@
 
 members = [
     "minicloze-cli",
+    "minicloze-gui",
     "minicloze-lib",
 ]

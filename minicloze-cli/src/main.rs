@@ -1,7 +1,6 @@
-use minicloze_lib::{langs::propagate, sentence::generate_sentences, sentence::Sentence};
+use minicloze_lib::{langs::propagate, sentence::generate_sentences, sentence::Sentence, wiktionary::wiktionary_try_open};
 
 use levenshtein::levenshtein;
-use rand::Rng;
 
 use std::env;
 use std::io;
@@ -9,9 +8,6 @@ use std::io::{Read, Write};
 use std::time::Instant;
 
 const DISTANCE_FOR_CLOSE: i32 = 3;
-const NON_SPACED: [&str; 12] = [
-    "cmn", "lzh", "hak", "cjy", "nan", "hsn", "gan", "jpn", "tha", "khm", "lao", "mya",
-];
 
 fn main() {
     clear_screen();
@@ -78,61 +74,18 @@ fn start_game(
     let mut correct = 0;
 
     for sentence in sentences {
-        // just the sentence's original text
-        let translation = &sentence.get_translation().unwrap().text;
+        let prompt = sentence.generate_prompt(&language);
 
-        let words: String;
-
-        let is_non_spaced = NON_SPACED.iter().any(|x| x == &language);
-
-        let mut rng = rand::thread_rng();
-        let raw_word: String;
-        let gap_index: usize;
-
-        if is_non_spaced {
-            let char_strings = translation.trim().chars().map(|x| x.to_string());
-            words = char_strings.collect::<String>();
-            gap_index = rng.gen_range(0..translation.chars().count());
-            raw_word = translation
-                .chars()
-                .map(|x| x.to_string())
-                .collect::<Vec<_>>()
-                .get(gap_index)
-                .unwrap()
-                .to_string();
-        } else {
-            words = translation.trim().split_inclusive(' ').collect::<String>();
-            let length = translation.trim().split_inclusive(' ').count();
-            gap_index = rng.gen_range(0..length);
-            raw_word = translation
-                .split_inclusive(' ')
-                .collect::<Vec<_>>()
-                .get(gap_index)
-                .unwrap()
-                .to_string();
-        }
-
-        let word = raw_word.replace(
-            &[
-                '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»',
-            ][..],
-            "",
-        );
-
-        let stripped_word = word.replace(' ', "");
-
-        let underscores_num = vec!['_'; stripped_word.chars().count()]
+        let underscores_num = vec!['_'; prompt.word.chars().count()]
             .into_iter()
             .collect::<String>();
-
-        let mut halved = words.split(&word).collect::<Vec<&str>>().into_iter();
 
         println!(
             "{}: {} {} {}",
             language.to_uppercase(),
-            halved.next().unwrap(),
+            prompt.first_half,
             underscores_num,
-            halved.last().unwrap_or_default()
+            prompt.second_half,
         );
 
         println!("ENG: {}", sentence.text);
@@ -143,15 +96,15 @@ fn start_game(
         read_into(&mut guess);
 
         let levenshtein_distance =
-            levenshtein(&guess.trim().to_lowercase(), &stripped_word.to_lowercase());
+            levenshtein(&guess.trim().to_lowercase(), &prompt.word.to_lowercase());
 
         if levenshtein_distance == 0 {
             correct += 1;
             println!("Correct.\n");
         } else if levenshtein_distance < DISTANCE_FOR_CLOSE as usize {
-            println!("Close, {}.\n", stripped_word);
+            println!("Close, {}.\n", prompt.word);
         } else {
-            println!("Wrong, {}.\n", stripped_word);
+            println!("Wrong, {}.\n", prompt.word);
         }
 
         loop {
@@ -163,31 +116,7 @@ fn start_game(
             if lookup.trim().is_empty() {
                 break;
             } else {
-                let lang_codes = propagate();
-
-                let mut full_language: String = "a".to_string();
-                // gets key from value
-                for pair in lang_codes {
-                    if pair.1 == language {
-                        full_language = pair.0.to_string();
-                    }
-                }
-                let titlecase_language = format!(
-                    "{}{}",
-                    full_language[..1].to_uppercase(),
-                    &full_language[1..]
-                );
-
-                open::that(
-                    [
-                        "https://en.wiktionary.org/wiki/",
-                        lookup.trim(),
-                        "#",
-                        titlecase_language.as_str(),
-                    ]
-                    .join(""),
-                )
-                .unwrap();
+                wiktionary_try_open(lookup, &language);
             }
         }
         println!();

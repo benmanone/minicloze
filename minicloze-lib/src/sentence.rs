@@ -1,4 +1,11 @@
+// logic which handles parsing a raw JSON from tatoeba into sentences
+
 use serde::{Deserialize, Serialize};
+use rand::{Rng, thread_rng};
+
+const NON_SPACED: [&str; 12] = [
+    "cmn", "lzh", "hak", "cjy", "nan", "hsn", "gan", "jpn", "tha", "khm", "lao", "mya",
+];
 
 // represents the entire JSON response. results is the sentences found.
 #[derive(Deserialize, Serialize)]
@@ -21,6 +28,12 @@ pub struct Translation {
     pub text: String,
 }
 
+pub struct Prompt {
+    pub first_half: String,
+    pub word: String,
+    pub second_half: String,
+}
+
 impl Sentence {
     // get the sentence's translation
     // sometimes translations.0 will be blank
@@ -30,6 +43,37 @@ impl Sentence {
         } else {
             self.translations.get(1).unwrap().get(0)
         }
+    }
+
+    // split string into vec of words, depends on whether the language uses spaces or not (e.g.
+    // japanese is not spaced)
+    pub fn as_words(&self, language: &str) -> Vec<String> {
+        let words: Vec<String>;
+        let translation = &self.get_translation().unwrap().text;
+
+        if NON_SPACED.contains(&language) {
+            let char_strings = translation.trim().chars().map(|x| x.to_string());
+            words = char_strings.collect::<Vec<String>>();
+        }
+        else {
+            words = translation.trim().split_inclusive(' ').map(|x| x.to_string()).collect::<Vec<String>>();
+        }
+        words
+    }
+
+    // splits a sentence into a prompt consisting of three parts
+    pub fn generate_prompt(&self, language: &str) -> Prompt {
+        let words: Vec<String> = self.as_words(&language);
+        let halved = words.split_at(thread_rng().gen_range(0..words.len()));
+
+        let word = halved.1[0].replace(
+            &[
+                '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', ' '
+            ][..],
+            "",
+        );
+
+        Prompt { first_half: halved.0.join(""), word, second_half: halved.1[1..].join("") }
     }
 }
 
