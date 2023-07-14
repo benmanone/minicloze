@@ -9,5 +9,5 @@ version = "1.4.0"
 edition = "2021"
 
 [dependencies]
-minicloze-lib = {version="0.1.0", path="../minicloze-lib/"}
+minicloze-lib = {version="0.2.0", path="../minicloze-lib/"}
 levenshtein = "1.0.5"
