@@ -69,12 +69,7 @@ impl Sentence {
         let words: Vec<String> = self.as_words(language);
         let halved = words.split_at(thread_rng().gen_range(0..words.len()));
 
-        let word = halved.1[0].replace(
-            &[
-                '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', ' ',
-            ][..],
-            "",
-        );
+        let word = remove_punctuation(&halved.1[0]);
 
         Prompt {
             first_half: halved.0.join(""),
@@ -131,4 +126,13 @@ fn convert_error(err: serde_json::Error) -> String {
 pub fn parse(results: &str) -> Result<Vec<Sentence>, String> {
     let sentences: Json = serde_json::from_str(results).map_err(convert_error)?;
     Ok(sentences.results)
+}
+
+pub fn remove_punctuation(word: &String) -> String {
+    word.replace(
+        &[
+        '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', ' ',
+        ][..],
+        "",
+        )
 }

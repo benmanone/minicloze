@@ -1,5 +1,5 @@
 use minicloze_lib::{
-    langs::propagate, sentence::generate_sentences, sentence::Sentence,
+    langs::propagate, sentence::{generate_sentences, remove_punctuation}, sentence::Sentence,
     wiktionary::wiktionary_try_open,
 };
 
@@ -62,7 +62,7 @@ fn main() {
 }
 
 // sentences: sentences for the game
-// len: how many sentences there are. almost always 10
+// len: how many sentences there are. always 10 if the language has enough sentences
 // language: what language the game is in
 // previous_correct: the total previous correct score
 // total: the previous total
@@ -99,7 +99,7 @@ fn start_game(
         read_into(&mut guess);
 
         let levenshtein_distance =
-            levenshtein(&guess.trim().to_lowercase(), &prompt.word.to_lowercase());
+            levenshtein(&remove_punctuation(&guess.trim().to_lowercase()), &prompt.word.to_lowercase());
 
         if levenshtein_distance == 0 {
             correct += 1;
