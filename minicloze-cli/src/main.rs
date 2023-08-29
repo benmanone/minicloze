@@ -10,6 +10,8 @@ use std::io;
 use std::io::{Read, Write};
 use std::time::Instant;
 
+use colored::*;
+
 const DISTANCE_FOR_CLOSE: i32 = 3;
 
 fn main() {
@@ -84,14 +86,14 @@ fn start_game(
             .collect::<String>();
 
         println!(
-            "{}: {} {} {}",
-            language.to_uppercase(),
-            prompt.first_half,
-            underscores_num,
-            prompt.second_half,
+            "{}{}{}{}",
+            format_target_language(language.to_uppercase() + ": ").bold(),
+            format_target_language(prompt.first_half),
+            format_target_language(underscores_num + " "),
+            format_target_language(prompt.second_half)
         );
 
-        println!("ENG: {}", sentence.text);
+        println!("{} {}", "ENG:".bold(), sentence.text);
 
         let mut guess = String::new();
 
@@ -103,16 +105,17 @@ fn start_game(
 
         if levenshtein_distance == 0 {
             correct += 1;
-            println!("Correct.\n");
+            println!("{}", "Correct.".bold().bright_white().on_green());
         } else if levenshtein_distance < DISTANCE_FOR_CLOSE as usize {
-            println!("Close, {}.\n", prompt.word);
+            println!("Close, {}.", prompt.word.to_lowercase().bold().bright_white().on_yellow());
         } else {
-            println!("Wrong, {}.\n", prompt.word);
+            println!("Wrong, {}.", prompt.word.bold().bright_white().on_red());
         }
+        println!();
 
         loop {
             let mut lookup = String::new();
-            println!("Lookup a word? [enter word or ignore]");
+            println!("{} {}", "Lookup a word?", "[enter word or ignore]".italic());
             print!("> ");
             read_into(&mut lookup);
 
@@ -173,4 +176,8 @@ fn pause() {
 fn read_into(buffer: &mut String) {
     io::stdout().flush().unwrap();
     io::stdin().read_line(buffer).unwrap();
+}
+
+fn format_target_language(str: String) -> ColoredString {
+    str.black().on_bright_white()
 }

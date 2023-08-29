@@ -11,3 +11,4 @@ edition = "2021"
 [dependencies]
 minicloze-lib = {version="0.3.0", path="../minicloze-lib/"}
 levenshtein = "1.0.5"
+colored = "2.0.4"
