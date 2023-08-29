@@ -20,6 +20,8 @@ To install `minicloze-cli`, the only currently supported frontend, use `cargo in
 # Usage
 For `minicloze-cli`, just pass in the language (from www.tatoeba.org) you want to use, e.g. `minicloze french`.
 
+![Example of use with French](french.gif)
+
 # Dependencies
 www.crates.io/crates/minreq
 
