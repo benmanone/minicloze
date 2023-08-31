@@ -18,7 +18,7 @@ A command-line cloze-based language-learning game using the Tatoeba database of 
 To install `minicloze-cli`, the only currently supported frontend, use `cargo install minicloze` (more likely to be up-to-date) or just download a release.
 
 # Usage
-For `minicloze-cli`, just pass in the language (from www.tatoeba.org) you want to use, e.g. `minicloze french`.
+For `minicloze-cli`, just pass in the language (from www.tatoeba.org) you want to use, e.g. `minicloze french`. Add `inverse` for inverse mode (`minicloze french inverse`).
 
 ![Example of use with French](french.gif)
 
@@ -32,6 +32,8 @@ www.crates.io/crates/rand
 www.crates.io/crates/open
 
 www.crates.io/crates/levenshtein
+
+www.crates.io/crates/colored
 
 # Contributing
 Any help is very welcome, just open a PR or an issue and I'll probably be able to reply quickly. Right now the focus is on expanding from the basic idea into a more fully-fledged and user friendly experience.

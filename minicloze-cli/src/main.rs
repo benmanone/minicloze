@@ -22,6 +22,12 @@ fn main() {
     // gets the tatoeba language codes from a separate file
     let lang_codes = propagate();
 
+    let inverse = if args.len() > 2 && args[2] == "inverse" {
+        true
+    } else {
+        false
+    };
+    
     let language_input = if args.len() > 1 {
         // the input from the command line
         (args[1]).to_string()
@@ -60,7 +66,7 @@ fn main() {
         elapsed, len
     );
 
-    start_game(sentences, len, language, 0, 0);
+    start_game(sentences, len, language, 0, 0, inverse);
 }
 
 // sentences: sentences for the game
@@ -74,26 +80,39 @@ fn start_game(
     language: String,
     previous_correct: i32,
     total: i32,
+    inverse: bool,
 ) {
     clear_screen();
     let mut correct = 0;
 
     for sentence in sentences {
-        let prompt = sentence.generate_prompt(&language);
+        let prompt = sentence.generate_prompt(&language, inverse);
 
         let underscores_num = vec!['_'; prompt.word.chars().count()]
             .into_iter()
             .collect::<String>();
 
-        println!(
+        let print_language = if inverse {
+            "eng"
+        } else {
+            &language
+        };
+
+        let non_english = format!(
             "{}{}{}{}",
-            format_target_language(language.to_uppercase() + ": ").bold(),
-            format_target_language(prompt.first_half),
-            format_target_language(underscores_num + " "),
-            format_target_language(prompt.second_half)
+            (print_language.to_uppercase() + ": ").bold(),
+            prompt.first_half,
+            underscores_num + " ",
+            prompt.second_half
         );
 
-        println!("{} {}", "ENG:".bold(), sentence.text);
+        if inverse {
+            println!("{}{}{}", format_target_language(&language.to_uppercase()), format_target_language(&": ".to_string()), format_target_language(&sentence.get_translation().unwrap().text));
+            println!("{}", &non_english);
+        } else {
+            println!("{}", format_target_language(&non_english));
+            println!("{} {}", "ENG:".bold(), sentence.text);
+        }
 
         let mut guess = String::new();
 
@@ -101,7 +120,7 @@ fn start_game(
         read_into(&mut guess);
 
         let levenshtein_distance =
-            levenshtein(&remove_punctuation(&guess.trim().to_lowercase()), &prompt.word.to_lowercase());
+            levenshtein(&remove_punctuation(&guess.trim().to_lowercase()), &prompt.word.to_lowercase().trim());
 
         if levenshtein_distance == 0 {
             correct += 1;
@@ -148,7 +167,7 @@ fn start_game(
     if replay.trim().to_lowercase().contains('y') {
         let sentences = generate_sentences(language.as_str()).unwrap();
         let len = sentences.len();
-        start_game(sentences, len, language, new_correct, new_total);
+        start_game(sentences, len, language, new_correct, new_total, inverse);
     } else {
         pause();
     }
@@ -178,6 +197,6 @@ fn read_into(buffer: &mut String) {
     io::stdin().read_line(buffer).unwrap();
 }
 
-fn format_target_language(str: String) -> ColoredString {
+fn format_target_language(str: &String) -> ColoredString {
     str.black().on_bright_white()
 }

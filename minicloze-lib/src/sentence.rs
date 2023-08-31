@@ -7,7 +7,7 @@ const NON_SPACED: [&str; 12] = [
     "cmn", "lzh", "hak", "cjy", "nan", "hsn", "gan", "jpn", "tha", "khm", "lao", "mya",
 ];
 
-// represents the entire JSON response. results is the sentences found.
+// represents the entire JSON response from Tatoeba. results is the sentences found.
 #[derive(Deserialize, Serialize)]
 pub struct Json {
     pub results: Vec<Sentence>,
@@ -47,8 +47,12 @@ impl Sentence {
 
     // split string into vec of words, depends on whether the language uses spaces or not (e.g.
     // japanese is not spaced)
-    pub fn as_words(&self, language: &str) -> Vec<String> {
-        let translation = &self.get_translation().unwrap().text;
+    pub fn as_words(&self, language: &str, inverse: bool) -> Vec<String> {
+        let translation = if inverse {
+            &self.text
+        } else {
+            &self.get_translation().unwrap().text
+        };
 
         let words: Vec<String> = if NON_SPACED.contains(&language) {
             let char_strings = translation.trim().chars().map(|x| x.to_string());
@@ -65,8 +69,8 @@ impl Sentence {
     }
 
     // splits a sentence into a prompt consisting of three parts
-    pub fn generate_prompt(&self, language: &str) -> Prompt {
-        let words: Vec<String> = self.as_words(language);
+    pub fn generate_prompt(&self, language: &str, inverse: bool) -> Prompt {
+        let words: Vec<String> = self.as_words(language, inverse);
         let halved = words.split_at(thread_rng().gen_range(0..words.len()));
 
         let word = remove_punctuation(&halved.1[0]);
@@ -106,14 +110,14 @@ pub fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, minreq::E
     let request = format!("https://tatoeba.org/en/api_v0/search?from=eng&orphans=no&sort=random&to={language}&unapproved=no");
     let response = minreq::get(request).send()?;
 
-    let rep_string = response.as_str()?;
+    let resp_str = response.as_str()?;
 
-    let sentences = parse(rep_string).unwrap();
+    let sentences = parse(resp_str).unwrap();
     Ok(sentences)
 }
 
 // converts a serde error into a string
-fn convert_error(err: serde_json::Error) -> String {
+pub fn convert_error(err: serde_json::Error) -> String {
     format!(
         "{:#?} error thrown by serde at {}:{}.",
         err.classify(),
