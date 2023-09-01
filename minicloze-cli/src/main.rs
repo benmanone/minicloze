@@ -88,9 +88,13 @@ fn start_game(
     for sentence in sentences {
         let prompt = sentence.generate_prompt(&language, inverse);
 
-        let underscores_num = vec!['_'; prompt.word.chars().count()]
-            .into_iter()
-            .collect::<String>();
+        let underscores_num = if inverse {
+            String::from("?")
+        } else {
+            vec!['_'; prompt.word.chars().count()]
+                .into_iter()
+                .collect::<String>()
+        };
 
         let print_language = if inverse {
             "eng"
@@ -102,7 +106,7 @@ fn start_game(
             "{}{}{}{}",
             (print_language.to_uppercase() + ": ").bold(),
             prompt.first_half,
-            underscores_num + " ",
+            (underscores_num + " ").bold(),
             prompt.second_half
         );
 
