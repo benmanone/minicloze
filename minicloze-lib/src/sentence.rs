@@ -135,7 +135,7 @@ pub fn parse(results: &str) -> Result<Vec<Sentence>, String> {
 pub fn remove_punctuation(word: &String) -> String {
     word.replace(
         &[
-        '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', ' ',
+        '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', '。', ' ',
         ][..],
         "",
         )

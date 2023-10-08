@@ -1,5 +1,7 @@
 use minicloze_lib::{
-    langs::propagate, sentence::{generate_sentences, remove_punctuation}, sentence::Sentence,
+    langs::propagate,
+    sentence::Sentence,
+    sentence::{generate_sentences, remove_punctuation},
     wiktionary::wiktionary_try_open,
 };
 
@@ -27,7 +29,7 @@ fn main() {
     } else {
         false
     };
-    
+
     let language_input = if args.len() > 1 {
         // the input from the command line
         (args[1]).to_string()
@@ -96,11 +98,7 @@ fn start_game(
                 .collect::<String>()
         };
 
-        let print_language = if inverse {
-            "eng"
-        } else {
-            &language
-        };
+        let print_language = if inverse { "eng" } else { &language };
 
         let non_english = format!(
             "{}{}{}{}",
@@ -111,7 +109,12 @@ fn start_game(
         );
 
         if inverse {
-            println!("{}{}{}", format_target_language(&language.to_uppercase()), format_target_language(&": ".to_string()), format_target_language(&sentence.get_translation().unwrap().text));
+            println!(
+                "{}{}{}",
+                format_target_language(&language.to_uppercase()),
+                format_target_language(&": ".to_string()),
+                format_target_language(&sentence.get_translation().unwrap().text)
+            );
             println!("{}", &non_english);
         } else {
             println!("{}", format_target_language(&non_english));
@@ -123,14 +126,19 @@ fn start_game(
         print!("> ");
         read_into(&mut guess);
 
-        let levenshtein_distance =
-            levenshtein(&remove_punctuation(&guess.trim().to_lowercase()), &prompt.word.to_lowercase().trim());
+        let levenshtein_distance = levenshtein(
+            &remove_punctuation(&guess.trim().to_lowercase()),
+            &prompt.word.to_lowercase().trim(),
+        );
 
         if levenshtein_distance == 0 {
             correct += 1;
             println!("{}", "Correct.".bold().bright_white().on_green());
         } else if levenshtein_distance < DISTANCE_FOR_CLOSE as usize {
-            println!("Close, {}.", prompt.word.to_lowercase().bold().bright_white().on_yellow());
+            println!(
+                "Close, {}.",
+                prompt.word.to_lowercase().bold().bright_white().on_yellow()
+            );
         } else {
             println!("Wrong, {}.", prompt.word.bold().bright_white().on_red());
         }
