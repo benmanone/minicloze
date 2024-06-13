@@ -14,7 +14,7 @@ pub struct Json {
 }
 
 // represents a sentence. id is the tatoeba id of the sentence, not used anywhere currently
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Sentence {
     id: i32,
     pub text: String,
@@ -22,12 +22,13 @@ pub struct Sentence {
 }
 
 // represents a translation. id is the tatoeba id of the translation
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Translation {
     id: i32,
     pub text: String,
 }
 
+#[derive(Clone)]
 pub struct Prompt {
     pub first_half: String,
     pub word: String,
@@ -135,8 +136,8 @@ pub fn parse(results: &str) -> Result<Vec<Sentence>, String> {
 pub fn remove_punctuation(word: &String) -> String {
     word.replace(
         &[
-        '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', '。', ' ',
+            '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', '。', ' ',
         ][..],
         "",
-        )
+    )
 }
