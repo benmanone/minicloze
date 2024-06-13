@@ -5,3 +5,4 @@ members = [
     "minicloze-lib",
     "minicloze-gui",
 ]
+resolver = "2"

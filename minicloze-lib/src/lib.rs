@@ -13,22 +13,21 @@ pub mod wiktionary {
                 full_language = pair.0.to_string();
             }
         }
-        println!("{}", full_language);
+
         let titlecase_language = format!(
             "{}{}",
             full_language[..1].to_uppercase(),
             &full_language[1..]
         );
 
-        open::that(
-            [
-                "https://en.wiktionary.org/wiki/",
-                lookup.trim(),
-                "#",
-                titlecase_language.as_str(),
-            ]
-            .join(""),
-        )
-        .unwrap();
+        let lookup_str = [
+            "https://en.wiktionary.org/wiki/",
+            lookup.trim(),
+            "#",
+            titlecase_language.as_str(),
+        ]
+        .join("");
+
+        webbrowser::open(&lookup_str).unwrap();
     }
 }
