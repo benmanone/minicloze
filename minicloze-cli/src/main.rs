@@ -120,9 +120,9 @@ fn start_game(
             println!("{}", &non_english);
         } else {
             print!(
-                "{color_black}{bg_bright_white}{style_bold}{}{style_reset}",
+                "{color_black}{bg_bright_white}{style_bold}{}:{style_reset}",
                 // {color_black}{bg_bright_white}{}{style_bold}{}{style_reset}{color_black}{bg_bright_white} {}{color_reset}{bg_reset}"
-                (print_language.to_uppercase() + ": ")
+                print_language.to_uppercase()
             );
 
             for word in prompt.first_half.split(" ") {
