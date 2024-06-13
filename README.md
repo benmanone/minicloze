@@ -22,19 +22,6 @@ For `minicloze-cli`, just pass in the language (from www.tatoeba.org) you want t
 
 ![Example of use with French](french.gif)
 
-# Dependencies
-www.crates.io/crates/minreq
-
-www.crates.io/crates/serde
-
-www.crates.io/crates/rand
-
-www.crates.io/crates/open
-
-www.crates.io/crates/levenshtein
-
-www.crates.io/crates/colored
-
 # Contributing
 Any help is very welcome, just open a PR or an issue and I'll probably be able to reply quickly. Right now the focus is on expanding from the basic idea into a more fully-fledged and user friendly experience.
 
