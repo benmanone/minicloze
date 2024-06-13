@@ -2,7 +2,7 @@ use minicloze_lib::{
     langs::propagate,
     sentence::Sentence,
     sentence::{generate_sentences, remove_punctuation},
-    wiktionary::wiktionary_try_open,
+    wiktionary::generate_url,
 };
 
 use levenshtein::levenshtein;
@@ -12,7 +12,9 @@ use std::io;
 use std::io::{Read, Write};
 use std::time::Instant;
 
-use colored::*;
+use inline_colorization::*;
+
+use terminal_link::*;
 
 const DISTANCE_FOR_CLOSE: i32 = 3;
 
@@ -101,24 +103,45 @@ fn start_game(
         let print_language = if inverse { "eng" } else { &language };
 
         let non_english = format!(
-            "{}{}{}{}",
-            (print_language.to_uppercase() + ": ").bold(),
+            "{style_bold}{}{style_reset}{}{style_bold}{}{style_reset} {}",
+            (print_language.to_uppercase() + ": "),
             prompt.first_half,
-            (underscores_num + " ").bold(),
+            underscores_num,
             prompt.second_half
         );
 
         if inverse {
             println!(
-                "{}{}{}",
-                format_target_language(&language.to_uppercase()),
-                format_target_language(&": ".to_string()),
-                format_target_language(&sentence.get_translation().unwrap().text)
+                "{color_black}{bg_bright_white}{}{}{}{color_reset}{bg_reset}",
+                &language.to_uppercase(),
+                &": ".to_string(),
+                &sentence.get_translation().unwrap().text
             );
             println!("{}", &non_english);
         } else {
-            println!("{}", format_target_language(&non_english));
-            println!("{} {}", "ENG:".bold(), sentence.text);
+            print!(
+                "{color_black}{bg_bright_white}{style_bold}{}{style_reset}",
+                // {color_black}{bg_bright_white}{}{style_bold}{}{style_reset}{color_black}{bg_bright_white} {}{color_reset}{bg_reset}"
+                (print_language.to_uppercase() + ": ")
+            );
+
+            for word in prompt.first_half.split(" ") {
+                print!(
+                    "{color_black}{bg_bright_white} {}{style_reset}",
+                    Link::new(&word, &generate_url(&word, &language))
+                )
+            }
+
+            print!("{color_black}{bg_bright_white}{underscores_num}{style_reset}");
+
+            for word in prompt.second_half.split(" ") {
+                print!(
+                    "{color_black}{bg_bright_white} {}{style_reset}",
+                    Link::new(&word, &generate_url(&word, &language))
+                )
+            }
+
+            println!("\n{style_bold}{}{style_reset} {}", "ENG:", sentence.text);
         }
 
         let mut guess = String::new();
@@ -133,29 +156,47 @@ fn start_game(
 
         if levenshtein_distance == 0 {
             correct += 1;
-            println!("{}", "Correct.".bold().bright_white().on_green());
+            println!(
+                "{}, {color_white}{bg_green}{}{color_reset}{bg_reset}",
+                "Correct",
+                Link::new(
+                    &prompt.word.to_lowercase().trim(),
+                    &generate_url(&prompt.word.to_lowercase().trim(), &language)
+                )
+            );
         } else if levenshtein_distance < DISTANCE_FOR_CLOSE as usize {
             println!(
-                "Close, {}.",
-                prompt.word.to_lowercase().bold().bright_white().on_yellow()
+                "Close, {style_bold}{color_bright_white}{bg_yellow}{}{bg_reset}{color_reset}{style_reset}.",
+                Link::new(
+                    &prompt.word.to_lowercase().trim(),
+                    &generate_url(&prompt.word.to_lowercase().trim(), &language)
+                )
             );
         } else {
-            println!("Wrong, {}.", prompt.word.bold().bright_white().on_red());
+            println!(
+                "Wrong, {style_bold}{color_bright_white}{bg_red}{}{bg_reset}{color_reset}{style_reset}.",
+                Link::new(
+                    &prompt.word.to_lowercase().trim(),
+                    &generate_url(&prompt.word.to_lowercase().trim(), &language)
+                )
+            );
         }
         println!();
 
-        loop {
-            let mut lookup = String::new();
-            println!("{} {}", "Lookup a word?", "[enter word or ignore]".italic());
-            print!("> ");
-            read_into(&mut lookup);
+        // Old lookup logic
 
-            if lookup.trim().is_empty() {
-                break;
-            } else {
-                wiktionary_try_open(lookup, &language);
-            }
-        }
+        // loop {
+        //     let mut lookup = String::new();
+        //     println!("{} {}", "Lookup a word?", "[enter word or ignore]");
+        //     print!("> ");
+        //     read_into(&mut lookup);
+
+        //     if lookup.trim().is_empty() {
+        //         break;
+        //     } else {
+        //         wiktionary_try_open(lookup, &language);
+        //     }
+        // }
         println!();
     }
 
@@ -207,8 +248,4 @@ fn pause() {
 fn read_into(buffer: &mut String) {
     io::stdout().flush().unwrap();
     io::stdin().read_line(buffer).unwrap();
-}
-
-fn format_target_language(str: &String) -> ColoredString {
-    str.black().on_bright_white()
 }
