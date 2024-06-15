@@ -128,7 +128,7 @@ fn start_game(
             for word in prompt.first_half.split(" ") {
                 print!(
                     "{color_black}{bg_bright_white} {}{style_reset}",
-                    Link::new(&word, &generate_url(&word, &language))
+                    Link::new(&word, &generate_url(&word.trim_matches(|c| char::is_ascii_punctuation(&c), &language))
                 )
             }
 
@@ -137,7 +137,7 @@ fn start_game(
             for word in prompt.second_half.split(" ") {
                 print!(
                     "{color_black}{bg_bright_white} {}{style_reset}",
-                    Link::new(&word, &generate_url(&word, &language))
+                    Link::new(&word, &generate_url(&word.trim_matches(|c| char::is_ascii_punctuation(&c), &language))
                 )
             }
 
