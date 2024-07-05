@@ -18,7 +18,8 @@ use terminal_link::*;
 
 const DISTANCE_FOR_CLOSE: i32 = 3;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     clear_screen();
 
     let args: Vec<_> = env::args().collect();
@@ -61,7 +62,7 @@ fn main() {
         .expect("Please enter a valid language")
         .to_string();
 
-    let sentences = generate_sentences(&language).unwrap();
+    let sentences = generate_sentences(&language).await.unwrap();
     let len = sentences.len();
     let elapsed = now.elapsed();
 
@@ -70,7 +71,7 @@ fn main() {
         elapsed, len
     );
 
-    start_game(sentences, len, language, 0, 0, inverse);
+    start_game(sentences, len, language, 0, 0, inverse).await;
 }
 
 // sentences: sentences for the game
@@ -78,7 +79,7 @@ fn main() {
 // language: what language the game is in
 // previous_correct: the total previous correct score
 // total: the previous total
-fn start_game(
+async fn start_game(
     sentences: Vec<Sentence>,
     len: usize,
     language: String,
@@ -230,7 +231,7 @@ fn start_game(
     read_into(&mut replay);
 
     if replay.trim().to_lowercase().contains('y') {
-        let sentences = generate_sentences(language.as_str()).unwrap();
+        let sentences = generate_sentences(language.as_str()).await.unwrap();
         let len = sentences.len();
         start_game(sentences, len, language, new_correct, new_total, inverse);
     } else {

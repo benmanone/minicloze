@@ -1,6 +1,7 @@
 // logic which handles parsing a raw JSON from tatoeba into sentences
 
 use rand::{thread_rng, Rng};
+use reqwest::Error;
 use serde::{Deserialize, Serialize};
 
 const NON_SPACED: [&str; 12] = [
@@ -85,9 +86,9 @@ impl Sentence {
 }
 
 // language: the language to request from tatoeba
-pub fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, minreq::Error> {
+pub async fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, Error> {
     // where the initial request happens
-    let mut sentences = sentences_http_request(language)?;
+    let mut sentences = sentences_http_request(language).await?;
 
     let len = sentences.len();
 
@@ -96,7 +97,7 @@ pub fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, 
         let difference = 10 - len;
         // makes more requests if required
         let mut sentences_difference = sentences_http_request(language)
-            .unwrap()
+            .await?
             .into_iter()
             .take(difference)
             .collect::<Vec<_>>();
@@ -107,11 +108,11 @@ pub fn generate_sentences(language: &str) -> std::result::Result<Vec<Sentence>, 
 }
 
 // language: the language to request from tatoeba
-pub fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, minreq::Error> {
+pub async fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, Error> {
     let request = format!("https://tatoeba.org/en/api_v0/search?from=eng&orphans=no&sort=random&to={language}&unapproved=no");
-    let response = minreq::get(request).send()?;
+    let response = reqwest::get(request).await?.text().await?;
 
-    let resp_str = response.as_str()?;
+    let resp_str = response.as_str();
 
     let sentences = parse(resp_str).unwrap();
     Ok(sentences)

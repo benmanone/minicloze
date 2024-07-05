@@ -5,7 +5,7 @@ repository = "https://github.com/benmanone/minicloze/"
 readme = "README.md"
 authors = ["benman"]
 license = "WTFPL"
-version = "1.7.1"
+version = "1.7.2"
 edition = "2021"
 
 [dependencies]
@@ -13,3 +13,4 @@ minicloze-lib = {version="0.4.4", path="../minicloze-lib/"}
 levenshtein = "1.0.5"
 terminal-link = "0.1.0"
 inline_colorization = "0.1.6"
+tokio = {version="1.38.0", features=["macros", "rt-multi-thread"]}
