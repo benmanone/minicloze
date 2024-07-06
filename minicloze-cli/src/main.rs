@@ -7,14 +7,16 @@ use minicloze_lib::{
 
 use levenshtein::levenshtein;
 
-use std::env;
 use std::io;
-use std::io::{Read, Write};
+use std::io::Write;
 use std::time::Instant;
+use std::{env, process::exit};
 
 use inline_colorization::*;
-
+use inquire::*;
 use terminal_link::*;
+
+use async_recursion::async_recursion;
 
 const DISTANCE_FOR_CLOSE: i32 = 3;
 
@@ -26,39 +28,34 @@ async fn main() {
 
     // gets the tatoeba language codes from a separate file
     let lang_codes = propagate();
+    let langs: Vec<&str> = lang_codes.clone().into_keys().collect();
 
-    let inverse = if args.len() > 2 && args[2] == "inverse" {
-        true
-    } else {
-        false
-    };
+    let inverse = args.len() > 2 && args[2] == "inverse";
 
     let language_input = if args.len() > 1 {
-        // the input from the command line
-        (args[1]).to_string()
+        // titlecase the input from the command line
+        args[1].to_string().remove(0).to_uppercase().to_string() + &args[1][1..]
     }
     // if compiled script is run
     else {
-        let mut input = String::new();
+        let ans: Result<&str, InquireError> =
+            Select::new("What language do you want to study?", langs)
+                .without_help_message()
+                .prompt();
 
-        print!("What language do you want to study? ");
-
-        read_into(&mut input);
-
-        input = input.trim_start().trim_end().to_string();
-        input
+        if let Ok(choice) = ans {
+            String::from(choice)
+        } else {
+            String::new()
+        }
     };
     print!("Fetching sentences for you...");
     io::stdout().flush().unwrap();
 
     let now = Instant::now();
 
-    let language_request = language_input.to_lowercase();
-
-    // TODO: autocorrect obvious mistakes (e.g. frnech vs french) and "mistakes" (e.g. mandarin vs
-    // mandarin chinese)
     let language = lang_codes
-        .get(&language_request.as_str())
+        .get(&language_input.as_str())
         .expect("Please enter a valid language")
         .to_string();
 
@@ -79,6 +76,8 @@ async fn main() {
 // language: what language the game is in
 // previous_correct: the total previous correct score
 // total: the previous total
+
+#[async_recursion]
 async fn start_game(
     sentences: Vec<Sentence>,
     len: usize,
@@ -126,13 +125,13 @@ async fn start_game(
                 print_language.to_uppercase()
             );
 
-            for word in prompt.first_half.split(" ") {
+            for word in prompt.first_half.split(' ') {
                 print!(
                     "{color_black}{bg_bright_white} {}{style_reset}",
                     Link::new(
-                        &word,
+                        word,
                         &generate_url(
-                            &word.trim_matches(|c| char::is_ascii_punctuation(&c)),
+                            word.trim_matches(|c| char::is_ascii_punctuation(&c)),
                             &language
                         )
                     )
@@ -141,20 +140,20 @@ async fn start_game(
 
             print!("{color_black}{bg_bright_white}{underscores_num}{style_reset}");
 
-            for word in prompt.second_half.split(" ") {
+            for word in prompt.second_half.split(' ') {
                 print!(
                     "{color_black}{bg_bright_white} {}{style_reset}",
                     Link::new(
-                        &word,
+                        word,
                         &generate_url(
-                            &word.trim_matches(|c| char::is_ascii_punctuation(&c)),
+                            word.trim_matches(|c| char::is_ascii_punctuation(&c)),
                             &language
                         )
                     )
                 )
             }
 
-            println!("\n{style_bold}{}{style_reset} {}", "ENG:", sentence.text);
+            println!("\n{style_bold}ENG:{style_reset} {}", sentence.text);
         }
 
         let mut guess = String::new();
@@ -164,33 +163,32 @@ async fn start_game(
 
         let levenshtein_distance = levenshtein(
             &remove_punctuation(&guess.trim().to_lowercase()),
-            &prompt.word.to_lowercase().trim(),
+            prompt.word.to_lowercase().trim(),
         );
 
         if levenshtein_distance == 0 {
             correct += 1;
             println!(
-                "{}, {color_white}{bg_green}{}{color_reset}{bg_reset}",
-                "Correct",
+                "Correct, {color_white}{bg_green}{}{color_reset}{bg_reset}",
                 Link::new(
-                    &prompt.word.to_lowercase().trim(),
-                    &generate_url(&prompt.word.to_lowercase().trim(), &language)
+                    prompt.word.to_lowercase().trim(),
+                    &generate_url(prompt.word.to_lowercase().trim(), &language)
                 )
             );
         } else if levenshtein_distance < DISTANCE_FOR_CLOSE as usize {
             println!(
                 "Close, {style_bold}{color_bright_white}{bg_yellow}{}{bg_reset}{color_reset}{style_reset}.",
                 Link::new(
-                    &prompt.word.to_lowercase().trim(),
-                    &generate_url(&prompt.word.to_lowercase().trim(), &language)
+                    prompt.word.to_lowercase().trim(),
+                    &generate_url(prompt.word.to_lowercase().trim(), &language)
                 )
             );
         } else {
             println!(
                 "Wrong, {style_bold}{color_bright_white}{bg_red}{}{bg_reset}{color_reset}{style_reset}.",
                 Link::new(
-                    &prompt.word.to_lowercase().trim(),
-                    &generate_url(&prompt.word.to_lowercase().trim(), &language)
+                    prompt.word.to_lowercase().trim(),
+                    &generate_url(prompt.word.to_lowercase().trim(), &language)
                 )
             );
         }
@@ -216,45 +214,31 @@ async fn start_game(
     let new_correct = previous_correct + correct;
     let new_total = total + len as i32;
 
-    if (new_total) / len as i32 == 1 {
-        println!("{}/{} sentences correct. Play again? [y/n]", correct, len);
+    let message = if (new_total) / len as i32 == 1 {
+        format!("{}/{} sentences correct. Play again?", correct, len)
     } else {
-        println!(
-            "{}/{} sentences correct locally, {}/{} sentences correct overall. Play again? [y/n]",
+        format!(
+            "{}/{} sentences correct locally, {}/{} sentences correct overall. Play again?",
             correct, len, new_correct, new_total
-        );
-    }
-    print!("> ");
+        )
+    };
 
-    let mut replay = String::new();
+    let replay = Select::new(&message, vec!["No", "Yes"]).prompt_skippable();
 
-    read_into(&mut replay);
-
-    if replay.trim().to_lowercase().contains('y') {
-        let sentences = generate_sentences(language.as_str()).await.unwrap();
-        let len = sentences.len();
-        start_game(sentences, len, language, new_correct, new_total, inverse);
-    } else {
-        pause();
+    if let Ok(c) = replay {
+        if c.unwrap() == "Yes" {
+            let sentences = generate_sentences(language.as_str()).await.unwrap();
+            let len = sentences.len();
+            start_game(sentences, len, language, new_correct, new_total, inverse).await;
+        } else {
+            exit(0);
+        }
     }
 }
 
 // clear the screen and position cursor at the top left
 fn clear_screen() {
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
-}
-
-// wait for keystroke before quitting
-fn pause() {
-    let mut stdin = io::stdin();
-    let mut stdout = io::stdout();
-
-    // print without a newline and flush manually.
-    write!(stdout, "Press any key to exit").unwrap();
-    stdout.flush().unwrap();
-
-    // read a single byte and discard
-    let _ = stdin.read(&mut [0u8]).unwrap();
 }
 
 // user input

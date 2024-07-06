@@ -40,10 +40,10 @@ impl Sentence {
     // get the sentence's translation
     // sometimes translations.0 will be blank
     pub fn get_translation(&self) -> Option<&Translation> {
-        if let Some(t) = self.translations.get(0).unwrap().get(0) {
+        if let Some(t) = self.translations.first().unwrap().first() {
             Some(t)
         } else {
-            self.translations.get(1).unwrap().get(0)
+            self.translations.get(1).unwrap().first()
         }
     }
 
@@ -134,7 +134,7 @@ pub fn parse(results: &str) -> Result<Vec<Sentence>, String> {
     Ok(sentences.results)
 }
 
-pub fn remove_punctuation(word: &String) -> String {
+pub fn remove_punctuation(word: &str) -> String {
     word.replace(
         &[
             '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', '。', ' ',

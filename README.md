@@ -11,7 +11,7 @@ A command-line cloze-based language-learning game using the Tatoeba database of 
 - **Long-term**
 - Build a FOSS version of Clozemaster
 - **Short-term**
-- Build an Iced-based GUI frontend alongside the current CLI frontend
+- Learn 100, 1000 etc. most common words of various languages
 - Play between two non-English languages
 
 # Installation
