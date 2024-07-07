@@ -223,10 +223,12 @@ async fn start_game(
         )
     };
 
-    let replay = Select::new(&message, vec!["No", "Yes"]).prompt_skippable();
+    let replay = Select::new(&message, vec!["No", "Yes"])
+        .without_help_message()
+        .prompt_skippable();
 
-    if let Ok(c) = replay {
-        if c.unwrap() == "Yes" {
+    if let Ok(o) = replay {
+        if let Some(_c) = o {
             let sentences = generate_sentences(language.as_str()).await.unwrap();
             let len = sentences.len();
             start_game(sentences, len, language, new_correct, new_total, inverse).await;
