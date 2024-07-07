@@ -228,10 +228,14 @@ async fn start_game(
         .prompt_skippable();
 
     if let Ok(o) = replay {
-        if let Some(_c) = o {
-            let sentences = generate_sentences(language.as_str()).await.unwrap();
-            let len = sentences.len();
-            start_game(sentences, len, language, new_correct, new_total, inverse).await;
+        if let Some(c) = o {
+            if c == "Yes" {
+                let sentences = generate_sentences(language.as_str()).await.unwrap();
+                let len = sentences.len();
+                start_game(sentences, len, language, new_correct, new_total, inverse).await;
+            } else {
+                exit(0);
+            }
         } else {
             exit(0);
         }
