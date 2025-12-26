@@ -5,7 +5,7 @@ repository = "https://github.com/benmanone/minicloze/"
 readme = "README.md"
 authors = ["benman"]
 license = "WTFPL"
-version = "0.4.6"
+version = "0.4.7"
 edition = "2021"
 
 [dependencies]

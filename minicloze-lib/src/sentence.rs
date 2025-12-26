@@ -15,7 +15,7 @@ pub struct Json {
 }
 
 // represents a sentence. id is the tatoeba id of the sentence, not used anywhere currently
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct Sentence {
     id: i32,
     pub text: String,
@@ -23,7 +23,7 @@ pub struct Sentence {
 }
 
 // represents a translation. id is the tatoeba id of the translation
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct Translation {
     id: i32,
     pub text: String,
@@ -40,11 +40,11 @@ impl Sentence {
     // get the sentence's translation
     // sometimes translations.0 will be blank
     pub fn get_translation(&self) -> Option<&Translation> {
-        if let Some(t) = self.translations.first().unwrap().first() {
-            Some(t)
-        } else {
-            self.translations.get(1).unwrap().first()
-        }
+        self.translations
+            .first()
+            .unwrap()
+            .first()
+            .map_or_else(|| self.translations.get(1).unwrap().first(), Some)
     }
 
     // split string into vec of words, depends on whether the language uses spaces or not (e.g.
@@ -63,7 +63,7 @@ impl Sentence {
             translation
                 .trim()
                 .split_inclusive(' ')
-                .map(|x| x.to_string())
+                .map(std::string::ToString::to_string)
                 .collect::<Vec<String>>()
         };
 
