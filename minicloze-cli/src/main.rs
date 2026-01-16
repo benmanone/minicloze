@@ -92,10 +92,26 @@ async fn start_game(
     for sentence in sentences {
         let prompt = sentence.generate_prompt(&language, inverse);
 
+        let clean_word = remove_punctuation(&prompt.word);
+        // Extract trailing punctuation characters from the end of the raw word
+        // Includes French whitespace: NBSP (U+00A0), thin space (U+2009), narrow no-break space (U+202F)
+        const PUNCTUATION: [char; 18] = [
+            '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', '。', ' ',
+            '\u{00A0}', '\u{2009}', '\u{202F}',
+        ];
+        let trailing_punct: String = prompt.word
+            .chars()
+            .rev()
+            .take_while(|c| PUNCTUATION.contains(c))
+            .collect::<String>()
+            .chars()
+            .rev()
+            .collect();
+
         let underscores_num = if inverse {
             String::from("?")
         } else {
-            vec!['_'; prompt.word.chars().count()]
+            vec!['_'; clean_word.chars().count()]
                 .into_iter()
                 .collect::<String>()
         };
@@ -138,7 +154,7 @@ async fn start_game(
                 )
             }
 
-            print!("{color_black}{bg_bright_white}{underscores_num}{style_reset}");
+            print!("{color_black}{bg_bright_white}{underscores_num}{trailing_punct}{style_reset}");
 
             for word in prompt.second_half.split(' ') {
                 print!(
@@ -163,33 +179,25 @@ async fn start_game(
 
         let levenshtein_distance = levenshtein(
             &remove_punctuation(&guess.trim().to_lowercase()),
-            prompt.word.to_lowercase().trim(),
+            &clean_word.to_lowercase(),
         );
 
+        let clean_word_lower = clean_word.to_lowercase();
         if levenshtein_distance == 0 {
             correct += 1;
             println!(
                 "Correct, {color_white}{bg_green}{}{color_reset}{bg_reset}",
-                Link::new(
-                    prompt.word.to_lowercase().trim(),
-                    &generate_url(prompt.word.to_lowercase().trim(), &language)
-                )
+                Link::new(&clean_word_lower, &generate_url(&clean_word_lower, &language))
             );
         } else if levenshtein_distance < DISTANCE_FOR_CLOSE as usize {
             println!(
                 "Close, {style_bold}{color_bright_white}{bg_yellow}{}{bg_reset}{color_reset}{style_reset}.",
-                Link::new(
-                    prompt.word.to_lowercase().trim(),
-                    &generate_url(prompt.word.to_lowercase().trim(), &language)
-                )
+                Link::new(&clean_word_lower, &generate_url(&clean_word_lower, &language))
             );
         } else {
             println!(
                 "Wrong, {style_bold}{color_bright_white}{bg_red}{}{bg_reset}{color_reset}{style_reset}.",
-                Link::new(
-                    prompt.word.to_lowercase().trim(),
-                    &generate_url(prompt.word.to_lowercase().trim(), &language)
-                )
+                Link::new(&clean_word_lower, &generate_url(&clean_word_lower, &language))
             );
         }
         println!();
