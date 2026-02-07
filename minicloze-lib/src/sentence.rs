@@ -73,13 +73,28 @@ impl Sentence {
     // splits a sentence into a prompt consisting of three parts
     pub fn generate_prompt(&self, language: &str, inverse: bool) -> Prompt {
         let words: Vec<String> = self.as_words(language, inverse);
-        let halved = words.split_at(thread_rng().gen_range(0..words.len()));
 
-        let word = remove_punctuation(&halved.1[0]);
+        // Find indices of words that have actual content after punctuation removal
+        // (filters out whitespace-only "words" from double spaces, etc.)
+        let valid_indices: Vec<usize> = words
+            .iter()
+            .enumerate()
+            .filter(|(_, w)| !remove_punctuation(w).trim().is_empty())
+            .map(|(i, _)| i)
+            .collect();
+
+        // Pick from valid indices, or fallback to any index if none are valid
+        let split_index = if valid_indices.is_empty() {
+            thread_rng().gen_range(0..words.len())
+        } else {
+            valid_indices[thread_rng().gen_range(0..valid_indices.len())]
+        };
+
+        let halved = words.split_at(split_index);
 
         Prompt {
             first_half: halved.0.join(""),
-            word,
+            word: halved.1[0].clone(), // keep raw word with punctuation
             second_half: halved.1[1..].join(""),
         }
     }
@@ -135,9 +150,11 @@ pub fn parse(results: &str) -> Result<Vec<Sentence>, String> {
 }
 
 pub fn remove_punctuation(word: &str) -> String {
+    // Includes French whitespace: NBSP (U+00A0), thin space (U+2009), narrow no-break space (U+202F)
     word.replace(
         &[
             '(', ')', ',', '.', ';', ':', '?', '¿', '!', '¡', '"', '«', '»', '。', ' ',
+            '\u{00A0}', '\u{2009}', '\u{202F}',
         ][..],
         "",
     )
