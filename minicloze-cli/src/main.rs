@@ -161,38 +161,35 @@ async fn start_game(
         print!("> ");
         read_into(&mut guess);
 
-        let levenshtein_distance = levenshtein(
-            &remove_punctuation(&guess.trim().to_lowercase()),
-            prompt.word.to_lowercase().trim(),
-        );
+        let levenshtein_distance =
+            levenshtein(&remove_punctuation(guess.trim()), prompt.word.trim());
 
         if levenshtein_distance == 0 {
             correct += 1;
             println!(
                 "Correct, {color_white}{bg_green}{}{color_reset}{bg_reset}",
                 Link::new(
-                    prompt.word.to_lowercase().trim(),
-                    &generate_url(prompt.word.to_lowercase().trim(), &language)
+                    prompt.word.trim(),
+                    &generate_url(prompt.word.trim(), &language)
                 )
             );
         } else if levenshtein_distance < DISTANCE_FOR_CLOSE as usize {
             println!(
                 "Close, {style_bold}{color_bright_white}{bg_yellow}{}{bg_reset}{color_reset}{style_reset}.",
                 Link::new(
-                    prompt.word.to_lowercase().trim(),
-                    &generate_url(prompt.word.to_lowercase().trim(), &language)
+                    prompt.word.trim(),
+                    &generate_url(prompt.word.trim(), &language)
                 )
             );
         } else {
             println!(
                 "Wrong, {style_bold}{color_bright_white}{bg_red}{}{bg_reset}{color_reset}{style_reset}.",
                 Link::new(
-                    prompt.word.to_lowercase().trim(),
-                    &generate_url(prompt.word.to_lowercase().trim(), &language)
+                    prompt.word.trim(),
+                    &generate_url(prompt.word.trim(), &language)
                 )
             );
         }
-        println!();
 
         // Old lookup logic
 
@@ -208,6 +205,7 @@ async fn start_game(
         //         wiktionary_try_open(lookup, &language);
         //     }
         // }
+
         println!();
     }
 

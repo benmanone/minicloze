@@ -11,7 +11,7 @@ const NON_SPACED: [&str; 12] = [
 // represents the entire JSON response from Tatoeba. results is the sentences found.
 #[derive(Deserialize, Serialize)]
 pub struct Json {
-    pub results: Vec<Sentence>,
+    pub data: Vec<Sentence>,
 }
 
 // represents a sentence. id is the tatoeba id of the sentence, not used anywhere currently
@@ -19,7 +19,7 @@ pub struct Json {
 pub struct Sentence {
     id: i32,
     pub text: String,
-    pub translations: Vec<Vec<Translation>>,
+    pub translations: Vec<Translation>,
 }
 
 // represents a translation. id is the tatoeba id of the translation
@@ -40,11 +40,7 @@ impl Sentence {
     // get the sentence's translation
     // sometimes translations.0 will be blank
     pub fn get_translation(&self) -> Option<&Translation> {
-        self.translations
-            .first()
-            .unwrap()
-            .first()
-            .map_or_else(|| self.translations.get(1).unwrap().first(), Some)
+        self.translations.first()
     }
 
     // split string into vec of words, depends on whether the language uses spaces or not (e.g.
@@ -109,7 +105,7 @@ pub async fn generate_sentences(language: &str) -> std::result::Result<Vec<Sente
 
 // language: the language to request from tatoeba
 pub async fn sentences_http_request(language: &str) -> Result<Vec<Sentence>, Error> {
-    let request = format!("https://tatoeba.org/en/api_v0/search?from=eng&orphans=no&sort=random&to={language}&unapproved=no");
+    let request = format!("https://api.tatoeba.org/v1/sentences?lang=eng&is_orphan=no&sort=random&trans:lang={language}&showtrans:lang={language}");
     let response = reqwest::get(request).await?.text().await?;
 
     let resp_str = response.as_str();
@@ -131,7 +127,7 @@ pub fn convert_error(err: serde_json::Error) -> String {
 // parse plaintext JSON response string into a Vec of Sentences results: the JSON
 pub fn parse(results: &str) -> Result<Vec<Sentence>, String> {
     let sentences: Json = serde_json::from_str(results).map_err(convert_error)?;
-    Ok(sentences.results)
+    Ok(sentences.data)
 }
 
 pub fn remove_punctuation(word: &str) -> String {
